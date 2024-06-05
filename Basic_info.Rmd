@@ -12,7 +12,9 @@ get_OldCode=function(Country,NOC){
 Country=read.csv("CountryCode.csv")
 Code=Country$Code
 Target_NOC="TPE"
-get_OldCode(Country,Target_NOC)
+Old_NOC=get_OldCode(Country,Target_NOC)
+#取得資訊
+Target_INFO=B[which(B$NOC==Target_NOC | B$NOC==Old_NOC),]
 ```
 
 ## 不同的運動項目

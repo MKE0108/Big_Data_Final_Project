@@ -1,5 +1,19 @@
 ```{R}
+B=read.csv("athlete_events.csv")
+```
 
+
+```{R}
+get_OldCode=function(Country,NOC){
+    #Country=read.csv("CountryCode.csv")
+    Code=Country$Code
+    return(unlist(strsplit(Country[which(Country$Code==NOC),]$OldCode," ")))
+}
+Country=read.csv("CountryCode.csv")
+Code=Country$Code
+Target_NOC="USA"
+Old_NOC=get_OldCode(Country,Target_NOC)
+Target_INFO=B[which(B$NOC==Target_NOC | B$NOC==Old_NOC),]
 
 
 ```
