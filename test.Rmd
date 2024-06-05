@@ -1,0 +1,17 @@
+```{R}
+B=read.csv("athlete_events.csv")
+```
+```{R}
+for (sp in unique(B$Sport)){
+    print(sp)
+    print('||||||||||||||||')
+    print(unique(B[which(B$Sport==sp),]$Event))
+    print("----------------")
+}
+
+```
+
+```{r}
+#SUMMARY B
+summary(B)
+```
