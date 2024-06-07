@@ -1,8 +1,6 @@
 ```{R}
 B=read.csv("athlete_events.csv")
 ```
-
-
 ```{R}
 
 library(dplyr)
