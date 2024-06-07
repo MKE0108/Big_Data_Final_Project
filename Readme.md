@@ -1,4 +1,4 @@
-# Step 1 各自的R exmaple code
+# Step 1 各自的R exmaple code(放到exmaple_code資料夾)
 ### 範例程式碼(一定要有的part)
 1. 決定選取的Feature
 ```R
