@@ -30,7 +30,7 @@ Medals=c("Silver","Gold","Bronze")
 Old_NOC=get_OldCode(Country,NOC)
 Target_INFO=B[which(B$NOC==NOC | B$NOC==Old_NOC),]
 Target_INFO=Target_INFO[which(Target_INFO$Season==Season & Target_INFO$Sport==Sport),]
-View(Target_INFO)
+
 #統計相同的Event且相同的Medal的合併和相同年分的總數
 Result=Target_INFO%>%filter(Medal %in% Medals)%>%group_by(Year,Event,Medal) %>% summarise(Count = 1)
 Result <- Result[which(Result$Year>=Begin_Year & Result$Year<=End_Year),]
@@ -55,17 +55,52 @@ if(length(Sport)<=4){
     Sport_text="Multiple sports"
 }
 
-# 使用 plot_ly 绘图
+# 使用 plot_ly 绘图(bar)
 p <- plot_ly(Result, x = ~Year, y = ~Count, color = ~Medal, colors = colors, type = 'bar') %>%
   layout(title = paste("\nCount of Medals", "in", NOC ,"(",Sport_text,")"),
          xaxis = list(title = 'Year'),
+            
          yaxis = list(
             title = 'Count',
             tickvals = seq(0, max(Result$Count) + 1, by = 1)
             
         )
     )
-        
-  
 p
+```
+```{R}
+# 使用 plot_ly 绘图(line)
+library(plotly)
+colors <- c("Gold" = "#FFD700", "Silver" = "#C0C0C0", "Bronze" = "#CD7F32")
+
+if(length(Sport)<=4){
+    Sport_text=paste(Sport,collapse=",")
+}else{
+    Sport_text="Multiple sports"
+}
+p1=NA
+first=TRUE
+for (medal in Medals){
+    tmpResult=Result[which(Result$Medal==medal),]
+    if(first){
+        first=FALSE
+        p1 <- plot_ly(name = medal,x = tmpResult$Year, y = tmpResult$Count, type = 'scatter',mode = 'lines+markers',line=list(color=colors[medal]),marker=list(color=colors[medal]))                  
+    }
+    else{
+        p1 <- add_trace(p1, x = tmpResult$Year, y = tmpResult$Count, type = 'scatter',mode = 'lines+markers',name = medal,line=list(color=colors[medal]),marker=list(color=colors[medal]))
+        # ,line=list(color=colors[medal]),marker=list(color=colors[medal])
+        # )
+    }
+}
+p1=layout(p1,title = paste("\nCount of Medals", "in", NOC ,"(",Sport_text,")"),
+        xaxis = list(title = 'Year',
+            tickvals=sort(unique(Result$Year))
+        ),
+        yaxis = list(
+            title = 'Count',
+            tickvals = seq(0, max(max(Result$Count)) + 1, by = 1)
+            
+        )
+)
+p1
 ```
