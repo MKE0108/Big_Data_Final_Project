@@ -25,7 +25,11 @@ for (sp in unique(B$Sport)){
     print(unique(B[which(B$Sport==sp),]$Event))
 }
 ```
+### test git
+```{R}
 
+
+```
 
 
 
