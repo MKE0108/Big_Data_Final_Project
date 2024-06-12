@@ -1,0 +1,28 @@
+```{R}
+library(dplyr)
+data=read.csv("athlete_events.csv")
+NOC="TPE"
+
+A=data[which(data$NOC==NOC),]%>%group_by(Year,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)
+#統計每項運動的總獎牌數
+weighted_A=A
+weighted_A[which(weighted_A$Medal=="Gold"),]$n=weighted_A[which(weighted_A$Medal=="Gold"),]$n*2
+weighted_A[which(weighted_A$Medal=="Silver"),]$n=weighted_A[which(weighted_A$Medal=="Silver"),]$n*1.5
+weighted_A[which(weighted_A$Medal=="Bronze"),]$n=weighted_A[which(weighted_A$Medal=="Bronze"),]$n*1
+weighted_A=weighted_A%>%group_by(Sport)%>%summarise(n=sum(n))
+weighted_A=weighted_A%>%arrange(desc(n))
+#get top3
+top3=weighted_A[1:3,]$Sport
+#top3 得牌數
+for (topSport in top3){
+    if(is.na(topSport)==FALSE){
+        print(topSport)
+        Gold=sum(A[which(A$Sport==topSport & A$Medal=="Gold"),]$n)
+        Silver=sum(A[which(A$Sport==topSport & A$Medal=="Silver"),]$n)
+        Bronze=sum(A[which(A$Sport==topSport & A$Medal=="Bronze"),]$n)
+    }
+}
+
+
+
+```
