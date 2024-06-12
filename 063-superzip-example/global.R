@@ -1,5 +1,6 @@
 library(dplyr)
-
+library(shinyWidgets)
+library(shiny)
 dataBase=read.csv("athlete_events.csv")
 Country=read.csv("CountryCode.csv")
 get_OldCode=function(Country,NOC){
@@ -13,7 +14,10 @@ get_OldCode=function(Country,NOC){
 
 #A.input selection && ingore NA
 A.Season_sel=na.omit(unique(dataBase$Season))
-A.NOC_sel=na.omit(unique(dataBase$NOC))
+A.NOC_sel=sort(na.omit(unique(dataBase$NOC)))
+
+A.NOC_sel_path <- paste0("<img src='","http://127.0.0.1:5500/Country_image/", A.NOC_sel, ".png' onerror='this.onerror=null;this.src=\"http://127.0.0.1:5500/Country_image/default.png\"' width='30px'><div class='jhr'></div>", A.NOC_sel)
+
 A.Sport_sel=na.omit(unique(dataBase$Sport))
 A.Begin_Year_sel=sort(na.omit(unique(dataBase$Year)))
 A.End_Year_sel=sort(na.omit(unique(dataBase$Year)))

@@ -5,11 +5,11 @@ library(lattice)
 library(dplyr)
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
-set.seed(100)
-zipdata <- allzips[sample.int(nrow(allzips), 10000),]
-# By ordering by centile, we ensure that the (comparatively rare) SuperZIPs
-# will be drawn last and thus be easier to see
-zipdata <- zipdata[order(zipdata$centile),]
+# set.seed(100)
+# zipdata <- allzips[sample.int(nrow(allzips), 10000),]
+# # By ordering by centile, we ensure that the (comparatively rare) SuperZIPs
+# # will be drawn last and thus be easier to see
+# zipdata <- zipdata[order(zipdata$centile),]
 
 function(input, output, session) {
   ## 獎牌統計 ###########################################
@@ -31,8 +31,7 @@ function(input, output, session) {
       }
       Medals = input$Medal
       # filter data
-      Old_NOC=get_OldCode(Country,NOC)
-      Target_INFO=dataBase[which(dataBase$NOC==NOC | dataBase$NOC==Old_NOC),]
+      Target_INFO=dataBase[which(dataBase$NOC==NOC),]
       Target_INFO=Target_INFO[which(Target_INFO$Season==Season & Target_INFO$Sport==Sport),]
       #統計相同的Event且相同的Medal的合併和相同年分的總數
       Result=Target_INFO%>%filter(Medal %in% Medals)%>%group_by(Year,Event,Medal) %>% summarise(Count = 1)

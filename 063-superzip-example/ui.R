@@ -1,5 +1,6 @@
 library(leaflet)
-
+library(shiny)
+library(plotly)
 # Choices for drop-downs
 # vars <- c(
 #   "Is SuperZIP?" = "superzip",
@@ -47,6 +48,14 @@ navbarPage("Superzip", id="nav",
   #     )
   #   )
   # ),
+
+
+  tags$head(tags$style("
+                      .jhr{
+                      display: inline;
+                      vertical-align: middle;
+                      padding-left: 10px;
+            }")),
   ### A. 獎牌統計
   tabPanel("獎牌統計",
       fluidRow(
@@ -54,7 +63,20 @@ navbarPage("Superzip", id="nav",
           selectInput("Season", "Season", c("All seasons"="", A.Season_sel), multiple=TRUE,selected="Summer")
         ),
         column(3,
-          selectInput("NOC", "NOC", c("All NOCs"="", A.NOC_sel), multiple=FALSE,selected="TPE")
+          # selectInput("NOC", "NOC", c("All NOCs"="", A.NOC_sel), multiple=FALSE,selected="TPE")
+          pickerInput(
+            inputId = "NOC", 
+            label = "NOC", 
+            choices =  (A.NOC_sel),
+            choicesOpt = list(
+              content = 
+               A.NOC_sel_path
+              )
+            ,
+            selected = "TPE"
+          )
+
+
         ),
         column(3,
           selectInput("Sport", "Sport", c("All sports"="", A.Sport_sel), multiple=TRUE,selected="Baseball")
