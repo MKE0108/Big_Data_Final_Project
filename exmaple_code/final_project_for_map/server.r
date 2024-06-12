@@ -46,9 +46,18 @@ shinyServer(function(input, output) {
     
     # 統計獎牌數量
     medal_counts <- data_regions %>%
-      group_by(NOC, region, Medal) %>%
-      summarise(count = n(), .groups = 'drop') %>%
+      group_by(Year, Event, NOC,region, Medal) %>%
+      summarise(count = 1, .groups = 'drop') %>%
       pivot_wider(names_from = Medal, values_from = count, values_fill = list(count = 0))
+    
+    medal_counts <- medal_counts %>%
+      group_by(NOC, region) %>%
+      summarise(
+        Gold = sum(Gold, na.rm = TRUE),
+        Silver = sum(Silver, na.rm = TRUE),
+        Bronze = sum(Bronze, na.rm = TRUE),
+        .groups = 'drop'
+      )
     
     # 合併並準備世界地圖數據
     world_map <- map_data("world")[, c(1, 2, 5)]  # 簡化讀取方式
