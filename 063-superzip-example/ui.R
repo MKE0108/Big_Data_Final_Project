@@ -95,8 +95,8 @@ navbarPage("Superzip", id="nav",
       tags$style(HTML("
         #A.text {
           font-size: 24px;
-        }
-      ")),
+        }"
+      )),
       textOutput("A.text"),
       fluidRow(
         column(6, plotlyOutput("A1.plot")),

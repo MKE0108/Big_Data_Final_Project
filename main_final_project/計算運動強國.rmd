@@ -1,0 +1,28 @@
+```{R}
+library(dplyr)
+data=read.csv("athlete_events.csv")
+#target sport
+Sport="Basketball"
+topNth=10
+#filter data 首先取得所有参加过篮球比赛的运动员
+if(Sport=="All"){
+  D=data[!is.na(data),]
+}else{
+  D=data[which(data$Sport==Sport),]
+}
+D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))%>%head(topNth)
+
+A=paste(apply(D, 1, function(row) {
+    paste0(
+    "<tr>",
+    "<td style='text-align: center;'><p style='font-size: 20px;margin-top: 3px ;margin-bottom:3px;'>", row[0], "</p></td>",
+    "<td style='text-align: center;'>", row[2], "</td>",
+    "<td style='text-align: center;'>", row[3], "</td>",
+    "<td style='text-align: center;'>", row[4], "</td>",
+    "</tr>"
+    )
+})
+, collapse = "")
+
+
+```
