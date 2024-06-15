@@ -39,83 +39,9 @@ shinyServer(function(input, output) {
       guides(fill = guide_colourbar(title = "Athletes")) +
       scale_fill_gradient(low = "white", high = "red")
   })
-  datasetInput_for_map2 <- reactive({
-    # 數據合併並過濾
-    data_regions <- data %>%
-      left_join(noc, by="NOC") %>%
-      filter(!is.na(region), Medal %in% c("Gold", "Silver", "Bronze"))
-    
-    # 統計獎牌數量
-    medal_counts <- data_regions %>%
-      group_by(Year, Event, NOC,region, Medal) %>%
-      summarise(count = 1, .groups = 'drop') %>%
-      pivot_wider(names_from = Medal, values_from = count, values_fill = list(count = 0))
-    
-    medal_counts <- medal_counts %>%
-      group_by(NOC, region) %>%
-      summarise(
-        Gold = sum(Gold, na.rm = TRUE),
-        Silver = sum(Silver, na.rm = TRUE),
-        Bronze = sum(Bronze, na.rm = TRUE),
-        .groups = 'drop'
-      )
-    
-    # 合併並準備世界地圖數據
-    world_map <- map_data("world")[, c(1, 2, 5)]  # 簡化讀取方式
-    map_data_final <- merge(world_map, medal_counts, by = "region", all.x = TRUE)
-    
-    # 處理 NA 值
-    map_data_final[is.na(map_data_final)] <- 0
-    
-    # 去除重複、NA數據和NOC=0的數據
-    unique_data <- distinct(map_data_final, region, .keep_all = TRUE) %>%
-      filter(!is.na(NOC), NOC != "0")
-    
-    region_centers <- world_map %>%
-      group_by(region) %>%
-      summarise(
-        center_long = mean(long, na.rm = TRUE),
-        center_lat = mean(lat, na.rm = TRUE)
-      )
-    unique_data <- unique_data %>%
-      left_join(region_centers, by = "region") %>%
-      mutate(long = center_long, lat = center_lat) %>%
-      select(-center_long, -center_lat)  # 移除暫存的中心位置列
-    #ADD top 3 sports COLUMN
-    unique_data[, c("Sport1", "Gold1", "Silver1", "Bronze1", "Sport2", "Gold2", "Silver2", "Bronze2", "Sport3", "Gold3", "Silver3", "Bronze3")] <- NA
 
-    # add top 3 sports
-    for(NOC in unique_data$NOC){
-        A=data[which(data$NOC==NOC),]%>%group_by(Year,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)
-        #統計每項運動的總獎牌數
-        weighted_A=A
-        weighted_A[which(weighted_A$Medal=="Gold"),]$n=weighted_A[which(weighted_A$Medal=="Gold"),]$n*2
-        weighted_A[which(weighted_A$Medal=="Silver"),]$n=weighted_A[which(weighted_A$Medal=="Silver"),]$n*1.5
-        weighted_A[which(weighted_A$Medal=="Bronze"),]$n=weighted_A[which(weighted_A$Medal=="Bronze"),]$n*1
-        weighted_A=weighted_A%>%group_by(Sport)%>%summarise(n=sum(n))
-        weighted_A=weighted_A%>%arrange(desc(n))
-        #get top3
-        top3=weighted_A[1:3,]$Sport
-        top3_res=c()
-        #top3 得牌數
-        for (topSport in top3){
-            if(is.na(topSport)==FALSE){
-                Gold=sum(A[which(A$Sport==topSport & A$Medal=="Gold"),]$n)
-                Silver=sum(A[which(A$Sport==topSport & A$Medal=="Silver"),]$n)
-                Bronze=sum(A[which(A$Sport==topSport & A$Medal=="Bronze"),]$n)
-                top3_res=c(top3_res,topSport,Gold,Silver,Bronze)
-            }else{
-                top3_res=c(top3_res,topSport,0,0,0)
-            }
-        }
-
-        unique_data[which(unique_data$NOC==NOC),8:19]=top3_res
-
-    }
-    unique_data
-  })
   output$map <- renderLeaflet({
-    unique_data=datasetInput_for_map2()
+    unique_data=NOC_summary_with_map
     # top3_res=datasetInput_for_map2()[2:11]
     
     iconUrl=paste0("Country_image/", unique_data$NOC, ".png")

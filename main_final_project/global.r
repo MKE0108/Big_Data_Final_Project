@@ -11,6 +11,10 @@ data_regions <- data %>%
   left_join(noc,by="NOC") %>%
   filter(!is.na(region))
 
+if(!file.exists("NOC_summary_with_map.csv")){
+  source("Gen_NOC_summary_with_map.R")
+}
+NOC_summary_with_map=  read.csv("NOC_summary_with_map.csv", row.names = 1)
 
 
 ### for 運動強國 pickerInput ####
