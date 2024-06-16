@@ -7,41 +7,20 @@ library(tibble)
 library(leaflet)
 library(shinyWidgets)
 library(shinythemes)
+library(shinydashboard)
 source("global.r")
 shinyUI(
   fluidPage(
-      tags$head(
-    tags$style(HTML("
-      #floatWindow {
-        position: fixed;
-        top: 100px;
-        left: 50px;
-        z-index: 999;
-        width: 300px;
-        height: auto;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        padding: 10px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
-      }
-      .handle {
-        cursor: move;
-        background-color: #eee;
-        padding: 5px 10px;
-        text-align: center;
-      }
-    ")),
-  ),
 
     tags$head(
         tags$style(HTML("
             #floating-sidebar {
                 position: fixed;
-                top: 70px;
-                right: 20px;
-                width: 250px;
+                top: 100px;
+                left: 100px;
+                width: 300px;
                 z-index: 9999;
-                background-color: #ffa73b;
+
                 padding: 10px;
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             }
@@ -156,55 +135,30 @@ shinyUI(
       ),
 
       tabPanel("運動強國",
-          fluidRow(
-            align = "center",
-            column(3),
-            column(3,
-              pickerInput(
-                inputId = "rank_Sports", 
-                label = "運動", 
-                choices =  ALLSPORT,
-                choicesOpt = list(
-                  content = 
-                    SPORT_HTML
-                  )
-                ,
-                selected = "All"
-              )
+          sidebarLayout(
+            uiOutput("sport_floating_sidebar"),
+            mainPanel(
+              uiOutput("rank_dynamic_html")
+            )
 
-              # selectInput("Sports", "運動", c("All Sports"="",data$Sport), multiple=TRUE,selected="Summer")
-            ),
-            column(3,
-              #顯示名次 使用拉桿
-              sliderInput("rank_Rank", "顯示名次", min=1, max=50, value=1)
-            ),
-            column(3)
-          ),
-          fluidRow(
-            align = "center",
-            column(4),
-             column(4,plotOutput("rank_wordCloudPlot")),
-            column(4),
-          ),
-          fluidRow(
-            align = "center",
-            column(12,uiOutput("rank_dynamic_html")),
-            
-          ),
+          )
 
       ),
       tabPanel("歷史回顧",
+          sidebarLayout(
+            uiOutput("history_floating_sidebar"),
               mainPanel(
-
+                
                 fluidRow(
                     column(12, plotlyOutput("history_plot")),      # pic1
                     column(12, plotlyOutput("history_height_weight")), # pic2
                     column(12, plotlyOutput("history_gold_age")),  # pic3
                 ),
 
-                uiOutput("history_floating_sidebar"),
+                
                 
             )
+          )
           
       
       
