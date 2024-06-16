@@ -15,7 +15,7 @@ noc=read.csv("./noc_regions.csv",sep=",",header=T)
 data_regions <- data %>% 
   left_join(noc,by="NOC") %>%
   filter(!is.na(region))
-
+Map1_Year_sel=sort(unique(data_regions$Year))
 if(!file.exists("NOC_summary_with_map.csv")){
   source("Gen_NOC_summary_with_map.R")
 }

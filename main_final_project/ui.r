@@ -119,15 +119,15 @@ shinyUI(
       title=div(img(src="https://static01.nyt.com/images/2012/07/15/magazine/15wmt/15wmt-jumbo.jpg", height = "25", style = "margin-right: 5px;"), "Olympic"),
 
       
-      tabPanel("地圖1",
-          sidebarLayout(
-            sidebarPanel(
-              sliderInput("year", "Choose a Year:", 1896, 2016, 1896,step = 4, animate= animationOptions(interval=2000, loop=TRUE))
-            ),    
-            mainPanel(
-              plotOutput("Year_Map_Plot")
-            )
-        )
+    tabPanel("地圖1",
+     sidebarLayout(
+       sidebarPanel(
+         sliderInput("Map1_year", "Choose a Year:",  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
+       ),    
+       mainPanel(
+         plotOutput("Year_Map_Plot")
+       )
+    )
       ),
       tabPanel("地圖2",
           mainPanel(      

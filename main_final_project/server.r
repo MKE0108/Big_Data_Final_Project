@@ -10,15 +10,46 @@ library(purrr)
 library(wordcloud)
 source("global.r")
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 ### map ####
+  observe({ # 0616更新
+    current_year <- input$Map1_year
+    next_year <- Map1_Year_sel[match(current_year, Map1_Year_sel) + 1]
+    if (!is.na(next_year)) {
+      updateSliderInput(session, "Map1_year", value = next_year)
+    }
+  })
+  
   datasetInput_for_map1 <- reactive({
     data_one_year <- data_regions %>% 
-      filter(Year == input$year) %>%  
+      filter(Year == input$Map1_year) %>%  
       group_by(region) %>%
       summarize(athlete_num = length(unique(ID)))
     data_one_year
   })
+  
+  output$Year_Map_Plot <- renderPlot({
+    data_one_year=datasetInput_for_map1()
+  
+    world <- map_data("world")
+    
+    mapdat <- tibble(region=unique(world$region))
+    mapdat <- mapdat %>% left_join(data_one_year, by="region") 
+    mapdat$athlete_num[is.na(mapdat$athlete_num)] <- 0
+    
+    world <- left_join(world, mapdat, by="region")
+    
+    ggplot(world, aes(x = long, y = lat, group = group)) +
+      geom_polygon(aes(fill = athlete_num)) + 
+      labs(title = input$year, x = NULL, y = NULL) +
+      theme(axis.ticks = element_blank(),
+            axis.text = element_blank(),
+            panel.background = element_rect(fill = "navy"),
+            plot.title = element_text(hjust = 0.5)) +
+      guides(fill = guide_colourbar(title = "Athletes")) +
+      scale_fill_gradient(low = "white", high = "red")
+  })
+  
   output$Year_Map_Plot <- renderPlot({
     data_one_year=datasetInput_for_map1()
   
