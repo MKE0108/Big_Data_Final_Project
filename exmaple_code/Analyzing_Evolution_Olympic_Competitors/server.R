@@ -46,7 +46,7 @@ function(input, output) {
       colors <- colorRampPalette(colors)(length(events)) 
     }
     color_map <- setNames(colors, events)  
-    print(tmp)
+
     p <- plot_ly(tmp, x = ~Height, y = ~Weight, type = 'scatter', mode = 'Paired',
                  marker = list(color = ~color_map[Event], opacity = 0.9), 
                  text = ~paste("Event:", Event, "Sport:", Sport),  #text on scatter

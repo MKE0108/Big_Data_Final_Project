@@ -7,12 +7,13 @@ library(tibble)
 library(leaflet)
 library(shinyWidgets)
 library(shinythemes)
-library(shinydashboard)
+
 source("global.r")
 shinyUI(
   fluidPage(
 
     tags$head(
+       tags$script(src = "http://d3js.org/d3.v3.min.js"),
         tags$style(HTML("
             #floating-sidebar {
                 position: fixed;
@@ -146,7 +147,12 @@ shinyUI(
       ),
       tabPanel("歷史回顧",
           sidebarLayout(
-            uiOutput("history_floating_sidebar"),
+              sidebarPanel(id="floating-sidebar",
+                  radioButtons("history_season", "Choose Season:",
+                              choices = list("Summer Olympics" = "Summer",
+                                              "Winter Twitter" = "Winter"),
+                              selected = "Summer")
+              ),
               mainPanel(
                 
                 fluidRow(

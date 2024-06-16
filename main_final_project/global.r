@@ -6,7 +6,8 @@ library(tidyr)
 library(dplyr)
 library(plotly)
 library(RColorBrewer)
-
+library(htmlwidgets)
+library(magrittr)
 data=read.csv("./athlete_events.csv",sep=",",header=T)
 noc=read.csv("./noc_regions.csv",sep=",",header=T)
 
@@ -25,7 +26,7 @@ SPORT_HTML=c()
 for(s in ALLSPORT){
   #s轉成小寫
   ss=tolower(s)
-  if(file.exists(paste0("Sports_image/",gsub(" ","_",s),"_pictogram.png"))){
+  if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
     SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",ss),"_pictogram.png' width='30px'><div class='jhr'></div>", s))
   }else{
     SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png' width='30px'><div class='jhr'></div>", s))
@@ -61,3 +62,14 @@ createColorScaleAndNormalize <- function(data, count_col, color_palette = "YlOrR
   #print(data)
   list(data = data, colorscale = colorscale)
 }
+Sport_url=c()
+for(s in ALLSPORT){
+  #s轉成小寫
+  ss=tolower(s)
+  if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
+      Sport_url <- c(Sport_url, paste0("https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",ss),"_pictogram.png"))
+  }else{
+      Sport_url <- c(Sport_url,paste0("https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png"))
+  }
+}
+names(Sport_url) <- ALLSPORT
