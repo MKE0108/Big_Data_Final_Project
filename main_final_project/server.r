@@ -7,6 +7,7 @@ library(tibble)
 library(leaflet)
 library(dplyr)
 library(purrr)
+library(wordcloud)
 source("global.r")
 
 shinyServer(function(input, output) {
@@ -43,7 +44,7 @@ shinyServer(function(input, output) {
   output$map <- renderLeaflet({
     unique_data=NOC_summary_with_map
     # top3_res=datasetInput_for_map2()[2:11]
-    
+
     iconUrl=paste0("Country_image/", unique_data$NOC, ".png")
     for (i in 1:length(iconUrl)){
       if (!file.exists(iconUrl[i])){
@@ -51,6 +52,8 @@ shinyServer(function(input, output) {
       }
     }
 
+
+    
     UserIcon <- icons(
       iconUrl = iconUrl,
       iconWidth = 22, iconHeight = 11
@@ -90,7 +93,7 @@ shinyServer(function(input, output) {
 
       "<tr>",
       "<td style='text-align: center;'>
-        <img src='","http://127.0.0.1:5500/Sports_image/",gsub(" ","_",Sport1), "_pictogram.png' onerror='this.onerror=null;this.src=\"http://127.0.0.1:5500/Sports_image/default.png\"' width='30px'>
+        <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport1)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
         <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport1,"</p>
       </td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold1,"</td>",
@@ -99,7 +102,7 @@ shinyServer(function(input, output) {
       "</tr>",
       "<tr>",
       "<td style='text-align: center;'>
-         <img src='","http://127.0.0.1:5500/Sports_image/",gsub(" ","_",Sport2), "_pictogram.png' onerror='this.onerror=null;this.src=\"http://127.0.0.1:5500/Sports_image/default.png\"' width='30px'>
+         <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport2)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
          <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport2,"</p>",
       "</td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold2,"</td>",
@@ -108,7 +111,7 @@ shinyServer(function(input, output) {
       "</tr>",
       "<tr>",
       "<td style='text-align: center;'>
-         <img src='","http://127.0.0.1:5500/Sports_image/",gsub(" ","_",Sport3), "_pictogram.png' onerror='this.onerror=null;this.src=\"http://127.0.0.1:5500/Sports_image/default.png\"' width='30px'>
+         <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport3)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
          <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport3,"</p>",
       "</td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold3,"</td>",
@@ -136,15 +139,7 @@ shinyServer(function(input, output) {
       D=data[which(data$Sport==Sport),]
     }
      D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))%>%head(topNth)
-    #生成文字雲
-    
-    words=D$NOC
-    freqs=as.numeric(D$Weight)
-    output$rank_wordCloudPlot <- renderPlot({
-      wordcloud(words, freqs, scale=c(5,0.5), colors=brewer.pal(8, "Dark2"))
-      
-    })
-   
+
     HTML(
       paste0(
         "<table class='content-table-full-page'>",
@@ -161,7 +156,7 @@ shinyServer(function(input, output) {
             paste0(
             "<tr>",
             "<td style='text-align: center;'>
-              <img src='","http://127.0.0.1:5500/Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"http://127.0.0.1:5500/Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
+              <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
               <p style='font-size: 15px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",noc[which(noc$NOC==row[1]),2],"</p>
             </td>",
             "<td style='text-align: center;'>", row[2], "</td>",
@@ -177,7 +172,22 @@ shinyServer(function(input, output) {
     )
 
   })
-
+  output$sport_floating_sidebar <- renderUI({
+        sidebarPanel(id = "floating-sidebar",
+              pickerInput(
+                inputId = "rank_Sports", 
+                label = "運動", 
+                choices =  ALLSPORT,
+                choicesOpt = list(
+                  content = 
+                    SPORT_HTML
+                  )
+                ,
+                selected = "All"
+              ),
+              sliderInput("rank_Rank", "顯示名次", min=1, max=50, value=1),
+            )
+  })
 
 
 ### history ####
