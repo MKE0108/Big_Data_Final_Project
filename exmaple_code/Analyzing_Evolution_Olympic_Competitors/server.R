@@ -38,13 +38,26 @@ function(input, output) {
   
   output$height_weight <- renderPlotly({
     tmp <- filteredData()$notNullMedalsFiltered  
-    p <- plot_ly(tmp, x = ~Height, y = ~Weight, type = 'scatter', mode = 'markers',
-                 marker = list(color = 'rgba(135, 206, 250, 0.8)')) %>%
+    
+    # 创建事件到颜色的映射
+    events <- unique(tmp$Event)
+    colors <- RColorBrewer::brewer.pal(min(length(events), 9), "Paired")  
+    if (length(events) > 9) {
+      colors <- colorRampPalette(colors)(length(events)) 
+    }
+    color_map <- setNames(colors, events)  
+    print(tmp)
+    p <- plot_ly(tmp, x = ~Height, y = ~Weight, type = 'scatter', mode = 'Paired',
+                 marker = list(color = ~color_map[Event], opacity = 0.9), 
+                 text = ~paste("Event:", Event, "Sport:", Sport),  #text on scatter
+                 hoverinfo = 'text') %>%
       layout(title = paste("Height vs Weight of Olympic Medalists -", input$season),
              xaxis = list(title = "Height"),
              yaxis = list(title = "Weight"))
     p
   })
+  
+  display.brewer.all()  
   
   output$gold_age <- renderPlotly({
     tmp <- filteredData()$gold_medals_filter  
@@ -52,12 +65,12 @@ function(input, output) {
       group_by(Age) %>%
       summarize(Count = n())
     
-    print(tmp)  # 检查tmp数据
+    #print(tmp)  # 检查tmp数据
     
     result <- createColorScaleAndNormalize(tmp, "Count")
     tmp <- result$data
     colorscale <- result$colorscale
-    print(tmp)  # 检查tmp数据
+    #print(tmp)  # 检查tmp数据
     # 确保颜色映射正确
     p <- plot_ly(data = tmp, x = ~Age, type = "bar",
                  y = ~Count, autobinx = FALSE,
