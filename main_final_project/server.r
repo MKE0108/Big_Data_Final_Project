@@ -39,83 +39,9 @@ shinyServer(function(input, output) {
       guides(fill = guide_colourbar(title = "Athletes")) +
       scale_fill_gradient(low = "white", high = "red")
   })
-  datasetInput_for_map2 <- reactive({
-    # 數據合併並過濾
-    data_regions <- data %>%
-      left_join(noc, by="NOC") %>%
-      filter(!is.na(region), Medal %in% c("Gold", "Silver", "Bronze"))
-    
-    # 統計獎牌數量
-    medal_counts <- data_regions %>%
-      group_by(Year, Event, NOC,region, Medal) %>%
-      summarise(count = 1, .groups = 'drop') %>%
-      pivot_wider(names_from = Medal, values_from = count, values_fill = list(count = 0))
-    
-    medal_counts <- medal_counts %>%
-      group_by(NOC, region) %>%
-      summarise(
-        Gold = sum(Gold, na.rm = TRUE),
-        Silver = sum(Silver, na.rm = TRUE),
-        Bronze = sum(Bronze, na.rm = TRUE),
-        .groups = 'drop'
-      )
-    
-    # 合併並準備世界地圖數據
-    world_map <- map_data("world")[, c(1, 2, 5)]  # 簡化讀取方式
-    map_data_final <- merge(world_map, medal_counts, by = "region", all.x = TRUE)
-    
-    # 處理 NA 值
-    map_data_final[is.na(map_data_final)] <- 0
-    
-    # 去除重複、NA數據和NOC=0的數據
-    unique_data <- distinct(map_data_final, region, .keep_all = TRUE) %>%
-      filter(!is.na(NOC), NOC != "0")
-    
-    region_centers <- world_map %>%
-      group_by(region) %>%
-      summarise(
-        center_long = mean(long, na.rm = TRUE),
-        center_lat = mean(lat, na.rm = TRUE)
-      )
-    unique_data <- unique_data %>%
-      left_join(region_centers, by = "region") %>%
-      mutate(long = center_long, lat = center_lat) %>%
-      select(-center_long, -center_lat)  # 移除暫存的中心位置列
-    #ADD top 3 sports COLUMN
-    unique_data[, c("Sport1", "Gold1", "Silver1", "Bronze1", "Sport2", "Gold2", "Silver2", "Bronze2", "Sport3", "Gold3", "Silver3", "Bronze3")] <- NA
 
-    # add top 3 sports
-    for(NOC in unique_data$NOC){
-        A=data[which(data$NOC==NOC),]%>%group_by(Year,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)
-        #統計每項運動的總獎牌數
-        weighted_A=A
-        weighted_A[which(weighted_A$Medal=="Gold"),]$n=weighted_A[which(weighted_A$Medal=="Gold"),]$n*2
-        weighted_A[which(weighted_A$Medal=="Silver"),]$n=weighted_A[which(weighted_A$Medal=="Silver"),]$n*1.5
-        weighted_A[which(weighted_A$Medal=="Bronze"),]$n=weighted_A[which(weighted_A$Medal=="Bronze"),]$n*1
-        weighted_A=weighted_A%>%group_by(Sport)%>%summarise(n=sum(n))
-        weighted_A=weighted_A%>%arrange(desc(n))
-        #get top3
-        top3=weighted_A[1:3,]$Sport
-        top3_res=c()
-        #top3 得牌數
-        for (topSport in top3){
-            if(is.na(topSport)==FALSE){
-                Gold=sum(A[which(A$Sport==topSport & A$Medal=="Gold"),]$n)
-                Silver=sum(A[which(A$Sport==topSport & A$Medal=="Silver"),]$n)
-                Bronze=sum(A[which(A$Sport==topSport & A$Medal=="Bronze"),]$n)
-                top3_res=c(top3_res,topSport,Gold,Silver,Bronze)
-            }else{
-                top3_res=c(top3_res,topSport,0,0,0)
-            }
-        }
-
-        unique_data[which(unique_data$NOC==NOC),8:19]=top3_res
-
-    }
-    unique_data
-  })
   output$map <- renderLeaflet({
-    unique_data=datasetInput_for_map2()
+    unique_data=NOC_summary_with_map
     # top3_res=datasetInput_for_map2()[2:11]
     
     iconUrl=paste0("Country_image/", unique_data$NOC, ".png")
@@ -135,46 +61,7 @@ shinyServer(function(input, output) {
       addTiles() %>%
       addMarkers(~long, ~lat, icon = UserIcon, 
                  popup = ~paste0(
-tags$style("
-          .content-table {
-              border-collapse: collapse;
-              margin: 5px 0;
-              font-size: 0.9em;
-              min-width: 60px;
-              border-radius: 5px 5px 0 0;
-              overflow: hidden;
-              box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-          }
 
-          .content-table thead tr {
-              background-color: #009879;
-              color: #ffffff;
-              text-align: left;
-              font-weight: bold;
-          }
-
-          .content-table th {
-              padding: 6px 7px;
-          }
-
-          .content-table td {
-              padding: 4px 6px;
-          }
-
-          .content-table tbody tr {
-              border-bottom: 1px solid #dddddd;
-          }
-
-          .content-table tbody tr:nth-of-type(even) {
-              background-color: #f3f3f3;
-          }
-
-          .content-table tbody tr:last-of-type {
-              border-bottom: 2px solid #009879;
-          }
-
-          "),
-  
 "<div style='font-size: 15px; text-align: center;font-weight: bold;'>",
     "<span style='text-decoration: underline;'>", region,"( ALL + TOP3 )", "</span>",
 "</div>",
@@ -237,64 +124,29 @@ tags$style("
       setView(lng = 100, lat = 0, zoom = 2)
     m
   })
-### sport rank ###
-  output$dynamic_html <- renderUI({
-    req(input$Sports)  # 確保有選擇運動
-    req(input$Rank)  # 確保有選擇名次
-    Sport=input$Sports
-    topNth=input$Rank
-    #filter data 首先取得所有参加过篮球比赛的运动员
+### sport rank ####
+  output$rank_dynamic_html <- renderUI({
+    req(input$rank_Sports)  # 確保有選擇運動
+    req(input$rank_Rank)  # 確保有選擇名次
+    Sport=input$rank_Sports
+    topNth=input$rank_Rank
     if(Sport=="All"){
       D=data[!is.na(data),]
     }else{
       D=data[which(data$Sport==Sport),]
     }
-    D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))%>%head(topNth)
+     D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))%>%head(topNth)
+    #生成文字雲
+    
+    words=D$NOC
+    freqs=as.numeric(D$Weight)
+    output$rank_wordCloudPlot <- renderPlot({
+      wordcloud(words, freqs, scale=c(5,0.5), colors=brewer.pal(8, "Dark2"))
+      
+    })
+   
     HTML(
       paste0(
-        tags$style
-        ("
-          .content-table-full-page {
-              border-collapse: collapse;
-              margin: 25px 0;
-              font-size: 0.9em;
-              min-width: 500px;
-              border-radius: 5px 5px 0 0;
-              overflow: hidden;
-              box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-          }
-
-          .content-table-full-page thead tr {
-              background-color: #009879;
-              color: #ffffff;
-              text-align: left;
-              font-weight: bold;
-          }
-
-          .content-table-full-page th {
-            padding: 13px 14px;
-            font-size: 25px;
-          }
-
-          .content-table-full-page td {
-            padding: 6px 7px;
-            font-size: 20px;
-          }
-
-          .content-table-full-page tbody tr {
-              border-bottom: 1px solid #dddddd;
-          }
-
-          .content-table-full-page tbody tr:nth-of-type(even) {
-              background-color: #f3f3f3;
-          }
-
-          .content-table-full-page tbody tr:last-of-type {
-              border-bottom: 2px solid #009879;
-          }
-          
-          
-        "),
         "<table class='content-table-full-page'>",
         "<thead>",
         "<tr>",
@@ -324,6 +176,85 @@ tags$style("
       )
     )
 
+  })
+
+
+
+### history ####
+output$history_floating_sidebar <- renderUI({
+        sidebarPanel(id = "floating-sidebar",
+            radioButtons("history_season", "Choose Season:",
+                        choices = list("Summer Olympics" = "Summer",
+                                        "Winter Twitter" = "Winter"),
+                        selected = "Summer")
+        )
+})
+
+
+filterDataBySeason <- function(data, season) {
+    filtered <- data %>%
+      filter(Season == season)
+    return(filtered)
+  }
+  
+  # Reactive expression to filter data based on selected season for multiple datasets
+  filteredData <- reactive({
+    list(
+      womenInOlympicsFiltered = filterDataBySeason(womenInOlympics, input$history_season),
+      notNullMedalsFiltered = filterDataBySeason(notNullMedals, input$history_season),
+      gold_medals_filter = filterDataBySeason(gold_medals, input$history_season)
+    )
+  })
+  
+  # Render Plotly plot based on filtered data
+  output$history_plot <- renderPlotly({
+    tmp <- filteredData()$womenInOlympicsFiltered    # Get the filtered data
+    result <- createColorScaleAndNormalize(tmp, "Count")
+    
+    normalizedData <- result$data
+    colorscale <- result$colorscale
+   
+    p <- plot_ly(data = tmp, x = ~as.factor(Year), y = ~Count, type = 'bar',
+                 marker = list(color = ~Count, colorscale = colorscale, showscale = TRUE)) %>%
+      layout(title = paste("Olympic Women Medals Per Edition -", input$season),
+             xaxis = list(title = "年份"),
+             yaxis = list(title = "數量"),
+             bargap = 0.2)  # 設定條形之間的間隔
+    p
+  })
+  
+  output$history_height_weight <- renderPlotly({
+    tmp <- filteredData()$notNullMedalsFiltered  
+    p <- plot_ly(tmp, x = ~Height, y = ~Weight, type = 'scatter', mode = 'markers',
+                 marker = list(color = 'rgba(135, 206, 250, 0.8)')) %>%
+      layout(title = paste("Height vs Weight of Olympic Medalists -", input$season),
+             xaxis = list(title = "Height"),
+             yaxis = list(title = "Weight"))
+    p
+  })
+  
+  output$history_gold_age <- renderPlotly({
+    tmp <- filteredData()$gold_medals_filter  
+    tmp <- tmp %>%
+      group_by(Age) %>%
+      summarize(Count = n())
+    
+    print(tmp)  # 检查tmp数据
+    
+    result <- createColorScaleAndNormalize(tmp, "Count")
+    tmp <- result$data
+    colorscale <- result$colorscale
+    print(tmp)  # 检查tmp数据
+    # 确保颜色映射正确
+    p <- plot_ly(data = tmp, x = ~Age, type = "bar",
+                 y = ~Count, autobinx = FALSE,
+                 xbins = list(start = min(tmp$Age) - 0.5, end = max(tmp$Age) + 0.5, size = 1),
+                 marker = list(color = ~Count, colorscale = colorscale, showscale = TRUE)) %>%
+      layout(title = paste("Age Distribution of Olympic Gold Medalists", input$season),
+             xaxis = list(title = "Age"),
+             yaxis = list(title = "Frequency of Gold Medals"),
+             bargap = 0.1)
+    p
   })
 })
 
