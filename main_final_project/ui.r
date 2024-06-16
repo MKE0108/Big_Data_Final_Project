@@ -29,7 +29,7 @@ shinyUI(
               border-collapse: collapse;
               margin: 25px 0;
               font-size: 0.9em;
-              min-width: 500px;
+              min-width: 600px;
               border-radius: 5px 5px 0 0;
               overflow: hidden;
               box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -115,7 +115,7 @@ shinyUI(
         )
     ),
     navbarPage(
-      theme = shinytheme("united"),
+      theme = shinytheme("paper"),
       title=div(img(src="https://static01.nyt.com/images/2012/07/15/magazine/15wmt/15wmt-jumbo.jpg", height = "25", style = "margin-right: 5px;"), "Olympic"),
 
       
@@ -137,9 +137,29 @@ shinyUI(
 
       tabPanel("運動強國",
           sidebarLayout(
-            uiOutput("sport_floating_sidebar"),
+            sidebarPanel(
+              pickerInput(
+                inputId = "rank_Sports", 
+                label = "運動", 
+                choices =  ALLSPORT,
+                choicesOpt = list(
+                  content = 
+                    SPORT_HTML
+                  )
+                ,
+                selected = "All"
+              ),
+              sliderInput("rank_Rank", "顯示名次", min=1, max=50, value=1),
+            ),
             mainPanel(
-              uiOutput("rank_dynamic_html")
+                fluidRow(
+
+                  column(width = 10,offset = 1, uiOutput("rank_dynamic_html")),
+
+                ),
+                
+              
+              
             )
 
           )
@@ -147,17 +167,16 @@ shinyUI(
       ),
       tabPanel("歷史回顧",
           sidebarLayout(
-              sidebarPanel(id="floating-sidebar",
+              sidebarPanel(
                   radioButtons("history_season", "Choose Season:",
                               choices = list("Summer Olympics" = "Summer",
                                               "Winter Twitter" = "Winter"),
                               selected = "Summer")
               ),
               mainPanel(
-                
                 fluidRow(
-                    column(12, plotlyOutput("history_plot")),      # pic1
                     column(12, plotlyOutput("history_height_weight")), # pic2
+                    column(12, plotlyOutput("history_plot")),      # pic1
                     column(12, plotlyOutput("history_gold_age")),  # pic3
                 ),
 

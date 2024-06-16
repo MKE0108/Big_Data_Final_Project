@@ -105,9 +105,9 @@ shinyServer(function(input, output, session) {
       "<thead>",
       "<tr>",
       "<th style='text-align: center;'>Sport</th>",
-      "<th style='text-align: center; color: gold;'>Gold</th>",
-      "<th style='text-align: center; color: seashell;'>Silver</th>",
-      "<th style='text-align: center; color: brown;'>Bronze</th>",
+        "<th style='text-align: center; color: gold;'>🥇Gold</th>",
+        "<th style='text-align: center; color: seashell;'>🥈Silver</th>",
+        "<th style='text-align: center; color: brown;'>🥉Bronze</th>",
       "</tr>",
       "</thead>",
       "<tbody>",
@@ -177,9 +177,9 @@ shinyServer(function(input, output, session) {
         "<thead>",
         "<tr>",
         "<th style='text-align: center;'>NOC</th>",
-        "<th style='text-align: center; color: gold;'>Gold</th>",
-        "<th style='text-align: center; color: seashell;'>Silver</th>",
-        "<th style='text-align: center; color: brown;'>Bronze</th>",
+        "<th style='text-align: center; color: gold;'>🥇Gold</th>",
+        "<th style='text-align: center; color: seashell;'>🥈Silver</th>",
+        "<th style='text-align: center; color: brown;'>🥉Bronze</th>",
         "</tr>",
         "</thead>",
         "<tbody>",
@@ -203,22 +203,7 @@ shinyServer(function(input, output, session) {
     )
 
   })
-  output$sport_floating_sidebar <- renderUI({
-        sidebarPanel(id = "floating-sidebar",
-              pickerInput(
-                inputId = "rank_Sports", 
-                label = "運動", 
-                choices =  ALLSPORT,
-                choicesOpt = list(
-                  content = 
-                    SPORT_HTML
-                  )
-                ,
-                selected = "All"
-              ),
-              sliderInput("rank_Rank", "顯示名次", min=1, max=50, value=1),
-            )
-  })
+ 
 
 
 ### history ####
