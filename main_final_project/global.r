@@ -62,18 +62,24 @@ for(n in ALL_NOC){
     if(is.na(region_name)){
       region_name="?" 
     }
-    flag=0
-    for(possible_noc in noc$NOC[which(noc$region==region_name)]){
-      if(file.exists(paste0("Country_image/",possible_noc,".png"))){
-        NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
-        flag=1
-        break
-      }
+    if(file.exists(paste0("Country_image/",n,".png"))){
+      NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",n,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+    }
+    else{
+        flag=0
+        for(possible_noc in noc$NOC[which(noc$region==region_name)]){
+          if(file.exists(paste0("Country_image/",possible_noc,".png"))){
+            NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+            flag=1
+            break
+          }
+        }
+
+        if(flag==0){
+          NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+        }
     }
 
-    if(flag==0){
-      NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
-    }
 
   }
 

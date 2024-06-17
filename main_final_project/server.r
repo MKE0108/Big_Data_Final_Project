@@ -339,8 +339,8 @@ output$country_rank_table <- renderDataTable({
     p <- plot_ly(data = tmp, x = ~as.factor(Year), y = ~Count, type = 'bar',
                  marker = list(color = ~Count, colorscale = colorscale, showscale = TRUE)) %>%
       layout(title = paste("Olympic Women Medals Per Edition -", input$history_season),
-             xaxis = list(title = "年份"),
-             yaxis = list(title = "數量"),
+             xaxis = list(title = "Year"),
+             yaxis = list(title = "Number of Medals"),
              bargap = 0.2)  # 設定條形之間的間隔
     p
   })
