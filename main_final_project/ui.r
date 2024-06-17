@@ -183,28 +183,34 @@ shinyUI(
                   ),
                   tabItem(tabName = "countryInfo",
                     # fluidRow(
-                      box(width = 3,title = "區域", status ="info", solidHeader = TRUE,
-                              pickerInput(
-                                inputId = "explore_Country", 
-                                label = NULL, 
-                                choices =  ALL_NOC,
-                                choicesOpt = list(
-                                  content = 
-                                    NOC_HTML
-                                  )
-                                ,
-                                selected = "TPE"
-                              ),
+                      column(6,
+                            box(height = 110,width = NULL,title = "區域", status ="info", solidHeader = TRUE,
+                                    pickerInput(
+                                      inputId = "explore_Country", 
+                                      label = NULL, 
+                                      choices =  ALL_NOC,
+                                      choicesOpt = list(
+                                        content = 
+                                          NOC_HTML
+                                        )
+                                      ,
+                                      selected = "TPE"
+                                    ),
+                            ),
+                             box(height = 236,width = NULL,title = "簡介", status ="info", solidHeader = TRUE,
+                                  p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                             
+                             )
+                            
                       ),
-                      box(width = 9,title = "地理資訊", status ="info", solidHeader = TRUE,
-                          leafletOutput("ex_country_map",)
+                      box(width = 6,title = "地理資訊", status ="info", solidHeader = TRUE,
+                          leafletOutput("ex_country_map", width = "100%", height = "300px")
                       ),
-                    # ),
-                    # fluidRow(
+
                       box(width = 12,title = "排行榜", status ="info", solidHeader = TRUE,
                           DT::dataTableOutput("country_rank_table")
                       )
-                    # )
+
                   )
               )
               

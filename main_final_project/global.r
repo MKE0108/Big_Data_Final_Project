@@ -53,22 +53,31 @@ ALL_NOC=sort(na.omit(unique(data$NOC)))
 NOC_HTML=c()
 for(n in ALL_NOC){
   n=as.character(n)
-  region_name=noc[which(noc$NOC==n),2]
-
-  if(length(region_name)==0){
-
-    ALL_NOC <- setdiff(ALL_NOC, n)
-    next
-  }
-  if(is.na(region_name)){
-    ALL_NOC <- setdiff(ALL_NOC, n)
-    next
-  }
-  if(file.exists(paste0("Country_image/",n,".png"))){
-    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",n,".png' width='30px'><div class='jhr'></div>", region_name))
+  index=which(noc$NOC==n)
+  
+  if(length(index)==0){
+    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"( ? )"))
   }else{
-    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", region_name))
+    region_name=noc[index,2]
+    if(is.na(region_name)){
+      region_name="?" 
+    }
+    flag=0
+    for(possible_noc in noc$NOC[which(noc$region==region_name)]){
+      if(file.exists(paste0("Country_image/",possible_noc,".png"))){
+        NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+        flag=1
+        break
+      }
+    }
+
+    if(flag==0){
+      NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+    }
+
   }
+
+
 }
 
 

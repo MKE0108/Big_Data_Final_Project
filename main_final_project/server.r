@@ -76,11 +76,24 @@ shinyServer(function(input, output, session) {
     unique_data=NOC_summary_with_map
     # top3_res=datasetInput_for_map2()[2:11]
 
-    iconUrl=paste0("Country_image/", unique_data$NOC, ".png")
-    for (i in 1:length(iconUrl)){
-      if (!file.exists(iconUrl[i])){
-        iconUrl[i] <- "Country_image/default.png"
-      }
+    iconUrl=c()
+    for(n in unique_data$NOC){
+        region_name=noc[which(noc$NOC==n),2]
+        if(length(region_name)==0){
+          iconUrl <- c(iconUrl, "Country_image/default.png")
+        }else {
+          flag=0
+          for(possible_noc in noc$NOC[which(noc$region==region_name)]){
+            if(file.exists(paste0("Country_image/",possible_noc,".png"))){
+              iconUrl <- c(iconUrl, paste0("Country_image/", possible_noc, ".png"))
+              flag=1
+              break
+            }
+          }
+          if(flag==0){
+            iconUrl <- c(iconUrl, "Country_image/default.png")
+          }
+        }
     }
 
 
@@ -219,18 +232,21 @@ output$ex_country_map<-renderLeaflet({
 output$country_rank_table <- renderDataTable({
     req(input$explore_Country)  # 確保有選擇國家
     target_noc=input$explore_Country
+    region_name=noc[which(noc$NOC==target_noc),2]
+
     #建立一個空的dataframe，放置運動的排名  
     df=data.frame(global_rank=numeric(),Sport=character(),Sport_html=character(),Gold=numeric(),Silver=numeric(),Bronze=numeric())
     
     for(s in ALLSPORT){
       D=SPORTS_RANK[[s]]
       #找到該國家的排名
+     
+
       index <- which(D$NOC==target_noc)
       if (length(index) == 1) {
         df=rbind(df,data.frame(global_rank=index,Sport=s,Sport_html=SPORT_HTML[which(ALLSPORT==s)]
                   ,Gold=D[index,2],Silver=D[index,3],Bronze=D[index,4]))
       }
-      
     }
     if(nrow(df)==0){
       html_df=df[,c(1,3,4,5,6)]
