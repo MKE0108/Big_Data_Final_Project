@@ -7,24 +7,14 @@ library(tibble)
 library(leaflet)
 library(shinyWidgets)
 library(shinythemes)
-
+library(shinydashboard)
 source("global.r")
 shinyUI(
   fluidPage(
-
+    shinyWidgets::useShinydashboard(),
     tags$head(
        tags$script(src = "http://d3js.org/d3.v3.min.js"),
         tags$style(HTML("
-            #floating-sidebar {
-                position: fixed;
-                top: 100px;
-                left: 100px;
-                width: 300px;
-                z-index: 9999;
-
-                padding: 10px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            }
             .content-table-full-page {
               border-collapse: collapse;
               margin: 25px 0;
@@ -120,21 +110,45 @@ shinyUI(
 
       
     tabPanel("地圖1",
-     sidebarLayout(
-       sidebarPanel(
-         sliderInput("Map1_year", "Choose a Year:",  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
-       ),    
-       mainPanel(
-         plotOutput("Year_Map_Plot")
-       )
-    )
+      
+      mainPanel(width = 12,
+        fluidRow(
+          column(width = 12,offset = 1,
+              box(width = 5,height = 150,
+                title = "解釋", status = "warning",
+                p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+              ),
+              box(width = 5,height = 150,
+                title = "年份", status = "warning",
+                sliderInput("Map1_year", NULL,  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
+                
+              )
+          )
+        ),
+        fluidRow(
+          column(width = 12,offset = 1,
+            box(width = 10,
+              title = "地圖", status = "warning", solidHeader = TRUE,
+              plotOutput("Year_Map_Plot")
+            ),
+          ),
+        ),
+
+      )
+    #  sidebarLayout(
+    #    sidebarPanel(
+    #      sliderInput("Map1_year", "Choose a Year:",  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
+    #    ),    
+    #    mainPanel(
+    #      plotOutput("Year_Map_Plot")
+    #    )
+    # )
       ),
       tabPanel("地圖2",
           mainPanel(      
           leafletOutput("map", width = "200%", height = "800px")  # 你可以调整高度
         )
       ),
-
       tabPanel("運動強國",
           sidebarLayout(
             sidebarPanel(
@@ -166,28 +180,45 @@ shinyUI(
 
       ),
       tabPanel("歷史回顧",
-          sidebarLayout(
-              sidebarPanel(
-                  radioButtons("history_season", "Choose Season:",
-                              choices = list("Summer Olympics" = "Summer",
-                                              "Winter Twitter" = "Winter"),
-                              selected = "Summer")
-              ),
-              mainPanel(
-                fluidRow(
-                    column(12, plotlyOutput("history_height_weight")), # pic2
-                    column(12, plotlyOutput("history_plot")),      # pic1
-                    column(12, plotlyOutput("history_gold_age")),  # pic3
-                ),
 
-                
-                
-            )
+          mainPanel(width = 12,
+            fluidRow(
+              column(12,
+                column(4,
+                  box(width = NULL,height = 220,
+                      title = "季節", status = "warning",
+                      radioButtons("history_season", NULL,
+                          choices = list("Summer Olympics" = "Summer",
+                                                          "Winter Twitter" = "Winter"),
+                          selected = "Summer")
+                  ),                
+                  box(width = NULL,height = 220,
+                      title = "解釋", status = "warning",
+                      p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                  ),
+                ),
+                column(8,
+                    box(width = NULL,
+                          title = "運動/體重/身高", status = "warning", solidHeader = TRUE,
+                          plotlyOutput("history_height_weight")
+                    ),
+                )
+              )
+            ),
+            fluidRow(
+              column(12,
+                box(width = 6,
+                    title = "歷史女性得牌數量", status = "warning", solidHeader = TRUE,
+                    plotlyOutput("history_plot")
+                ),                
+                box(width = 6,
+                     title = "歷史金牌獲獎者年紀", status = "warning", solidHeader = TRUE,
+                     plotlyOutput("history_gold_age")
+                ),
+              ),
+            ),
           )
-          
-      
-      
-      )
-    ),
+      ),
   )
+)
 )

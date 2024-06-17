@@ -41,7 +41,7 @@ shinyServer(function(input, output, session) {
     
     ggplot(world, aes(x = long, y = lat, group = group)) +
       geom_polygon(aes(fill = athlete_num)) + 
-      labs(title = input$year, x = NULL, y = NULL) +
+      labs(title = input$Map1_year, x = NULL, y = NULL) +
       theme(axis.ticks = element_blank(),
             axis.text = element_blank(),
             panel.background = element_rect(fill = "navy"),
@@ -63,7 +63,7 @@ shinyServer(function(input, output, session) {
     
     ggplot(world, aes(x = long, y = lat, group = group)) +
       geom_polygon(aes(fill = athlete_num)) + 
-      labs(title = input$year, x = NULL, y = NULL) +
+      labs(title = input$Map1_year, x = NULL, y = NULL) +
       theme(axis.ticks = element_blank(),
             axis.text = element_blank(),
             panel.background = element_rect(fill = "navy"),
@@ -208,8 +208,6 @@ shinyServer(function(input, output, session) {
 
 ### history ####
 
-
-
   filterDataBySeason <- function(data, season) {
     filtered <- data %>%
       filter(Season == season)
@@ -235,7 +233,7 @@ shinyServer(function(input, output, session) {
    
     p <- plot_ly(data = tmp, x = ~as.factor(Year), y = ~Count, type = 'bar',
                  marker = list(color = ~Count, colorscale = colorscale, showscale = TRUE)) %>%
-      layout(title = paste("Olympic Women Medals Per Edition -", input$season),
+      layout(title = paste("Olympic Women Medals Per Edition -", input$history_season),
              xaxis = list(title = "年份"),
              yaxis = list(title = "數量"),
              bargap = 0.2)  # 設定條形之間的間隔
@@ -261,7 +259,7 @@ shinyServer(function(input, output, session) {
                  hoverinfo = 'text') 
 
     p=p%>% htmlwidgets::onRender(readLines("hover_tooltip.js"))%>%
-                 layout(title = paste("Height vs Weight of Olympic Medalists -", input$season),
+                 layout(title = paste("Height vs Weight of Olympic Medalists -", input$history_season),
                   xaxis = list(title = "Height"),
                   yaxis = list(title = "Weight"))
     
@@ -287,7 +285,7 @@ shinyServer(function(input, output, session) {
                 #  autobinx = FALSE,
                 #  xbins = list(start = min(tmp$Age) - 0.5, end = max(tmp$Age) + 0.5, size = 1),
                  marker = list(color = ~Count, colorscale = colorscale, showscale = TRUE)) %>%
-      layout(title = paste("Age Distribution of Olympic Gold Medalists", input$season),
+      layout(title = paste("Age Distribution of Olympic Gold Medalists", input$history_season),
              xaxis = list(title = "Age"),
              yaxis = list(title = "Frequency of Gold Medals"),
              bargap = 0.1)
