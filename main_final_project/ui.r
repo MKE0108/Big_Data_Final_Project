@@ -107,8 +107,7 @@ shinyUI(
     navbarPage(
       theme = shinytheme("paper"),
       title=div(img(src="https://static01.nyt.com/images/2012/07/15/magazine/15wmt/15wmt-jumbo.jpg", height = "25", style = "margin-right: 5px;"), "Olympic"),
-      tabPanel("地圖1",
-      
+      tabPanel("各國參賽人數",
       mainPanel(width = 12,
         fluidRow(
           column(width = 12,offset = 1,
@@ -158,7 +157,7 @@ shinyUI(
               fluidPage(
                 tabItems(
                   tabItem(tabName = "overview",
-                    leafletOutput("overview_map", width = "200%", height = "800px")
+                    leafletOutput("overview_map", width = "100%", height = "800px")
                   ),
                   tabItem(tabName = "topcountry",
                         box(width = 12,title = "運動", status ="info", solidHeader = TRUE,

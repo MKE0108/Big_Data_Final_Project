@@ -168,7 +168,7 @@ shinyServer(function(input, output, session) {
     ),
       label = ~region,
       labelOptions = labelOptions(noHide = FALSE, direction = 'auto', style = list('color' = 'black', 'font-size' = '16px')))%>%
-      setView(lng = 100, lat = 0, zoom = 2)
+      setView(lng = 0, lat = 0, zoom = 2)
     m
   })
 ### sport rank ####
@@ -360,7 +360,7 @@ output$country_rank_table <- renderDataTable({
 
     p <- plot_ly(tmp, x = ~Height, y = ~Weight, customdata = ~Sport_url[Sport],type = 'scatter', mode = 'Paired',
                  marker = list(color = ~color_map[Event], opacity = 0.9), 
-                 text = ~paste(Sport,"Event:", Event),  #text on scatter
+                text = ~paste("Event:", Event, "<br>Height:", Height,"cm", "<br>Weight:", Weight,"kg"),
                  hoverinfo = 'text') 
 
     p=p%>% htmlwidgets::onRender(readLines("hover_tooltip.js"))%>%
