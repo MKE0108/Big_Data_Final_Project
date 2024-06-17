@@ -19,8 +19,9 @@ Map1_Year_sel=sort(unique(data_regions$Year))
 if(!file.exists("NOC_summary_with_map.csv")){
   source("Gen_NOC_summary_with_map.R")
 }
-NOC_summary_with_map=  read.csv("NOC_summary_with_map.csv", row.names = 1)
-### for 運動強國 pickerInput ####
+
+NOC_summary_with_map= read.csv("NOC_summary_with_map.csv", row.names = 1)
+### for 運動強國 ####
 ALLSPORT=c("All",sort(na.omit(unique(data$Sport))))
 SPORT_HTML=c()
 for(s in ALLSPORT){
@@ -32,6 +33,45 @@ for(s in ALLSPORT){
     SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png' width='30px'><div class='jhr'></div>", s))
   }
 }
+
+
+if(!file.exists("Sports_rank/Tennis.csv")){
+  source("Gen_Sports_Rank.R")
+}
+Sports=data%>%select(Sport)%>%distinct()%>%arrange(Sport)
+
+SPORTS_RANK=c()
+for(s in Sports$Sport){
+  D=read.csv(paste0("./Sports_rank/",s,".csv"))
+  SPORTS_RANK[[s]]=D
+}
+D=read.csv(paste0("./Sports_rank/","All",".csv"))
+SPORTS_RANK[["All"]]=D
+
+
+ALL_NOC=sort(na.omit(unique(data$NOC)))
+NOC_HTML=c()
+for(n in ALL_NOC){
+  n=as.character(n)
+  region_name=noc[which(noc$NOC==n),2]
+
+  if(length(region_name)==0){
+
+    ALL_NOC <- setdiff(ALL_NOC, n)
+    next
+  }
+  if(is.na(region_name)){
+    ALL_NOC <- setdiff(ALL_NOC, n)
+    next
+  }
+  if(file.exists(paste0("Country_image/",n,".png"))){
+    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",n,".png' width='30px'><div class='jhr'></div>", region_name))
+  }else{
+    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", region_name))
+  }
+}
+
+
 ### for 歷史數據 ####
 #data <- read.csv("athlete_events.csv", header = TRUE, sep=',', na.strings = c("", "NA"))
 

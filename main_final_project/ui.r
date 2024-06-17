@@ -91,14 +91,14 @@ shinyUI(
           }
         "))
     ),
+    #下拉選單圖片＋文字組合時，文字的template
     tags$head(tags$style("
               .jhr{
               display: inline;
               vertical-align: middle;
               padding-left: 10px;
     }")),
-    list(tags$head(HTML('<link rel="icon", href="MyIcon.png", 
-                                  type="image/png" />'))),
+    #導覽頁padding
     div(style="padding: 1px 0px; width: '100%'",
         titlePanel(
                 title="", windowTitle="My Window Title"
@@ -107,9 +107,7 @@ shinyUI(
     navbarPage(
       theme = shinytheme("paper"),
       title=div(img(src="https://static01.nyt.com/images/2012/07/15/magazine/15wmt/15wmt-jumbo.jpg", height = "25", style = "margin-right: 5px;"), "Olympic"),
-
-      
-    tabPanel("地圖1",
+      tabPanel("地圖1",
       
       mainPanel(width = 12,
         fluidRow(
@@ -144,41 +142,80 @@ shinyUI(
     #    )
     # )
       ),
-      tabPanel("地圖2",
-          mainPanel(      
-          leafletOutput("map", width = "200%", height = "800px")  # 你可以调整高度
-        )
-      ),
-      tabPanel("運動強國",
-          sidebarLayout(
-            sidebarPanel(
-              pickerInput(
-                inputId = "rank_Sports", 
-                label = "運動", 
-                choices =  ALLSPORT,
-                choicesOpt = list(
-                  content = 
-                    SPORT_HTML
+
+      tabPanel("探索國家",
+        dashboardPage(
+          dashboardHeader(disable=TRUE),
+          dashboardSidebar(
+            sidebarMenu(
+              menuItem("總覽", tabName = "overview", icon = icon("globe")),
+              menuItem("運動強國", tabName = "topcountry", icon = icon("trophy")),
+              menuItem("各國資訊", tabName = "countryInfo", icon = icon("info-circle"))
+
+            )
+          ),
+          dashboardBody(
+              fluidPage(
+                tabItems(
+                  tabItem(tabName = "overview",
+                    leafletOutput("overview_map", width = "200%", height = "800px")
+                  ),
+                  tabItem(tabName = "topcountry",
+                        box(width = 12,title = "運動", status ="info", solidHeader = TRUE,
+                            pickerInput(
+                              inputId = "rank_Sports", 
+                              label = NULL, 
+                              choices =  ALLSPORT,
+                              choicesOpt = list(
+                                content = 
+                                  SPORT_HTML
+                                )
+                              ,
+                              selected = "All"
+                            ),
+                        ),
+                        box(width = 12,title = "排行榜", status ="info", solidHeader = TRUE,collapsible=TRUE,
+                            #output DT
+                            DT::dataTableOutput("global_rank_table")
+                            # uiOutput("rank_dynamic_html")
+                        ),
+          
+                  ),
+                  tabItem(tabName = "countryInfo",
+                    # fluidRow(
+                      box(width = 3,title = "區域", status ="info", solidHeader = TRUE,
+                              pickerInput(
+                                inputId = "explore_Country", 
+                                label = NULL, 
+                                choices =  ALL_NOC,
+                                choicesOpt = list(
+                                  content = 
+                                    NOC_HTML
+                                  )
+                                ,
+                                selected = "TPE"
+                              ),
+                      ),
+                      box(width = 9,title = "地理資訊", status ="info", solidHeader = TRUE,
+                          leafletOutput("ex_country_map",)
+                      ),
+                    # ),
+                    # fluidRow(
+                      box(width = 12,title = "排行榜", status ="info", solidHeader = TRUE,
+                          DT::dataTableOutput("country_rank_table")
+                      )
+                    # )
                   )
-                ,
-                selected = "All"
-              ),
-              sliderInput("rank_Rank", "顯示名次", min=1, max=50, value=1),
-            ),
-            mainPanel(
-                fluidRow(
-
-                  column(width = 10,offset = 1, uiOutput("rank_dynamic_html")),
-
-                ),
-                
-              
+              )
               
             )
-
           )
-
+        )
       ),
+
+
+
+
       tabPanel("歷史回顧",
 
           mainPanel(width = 12,
@@ -222,3 +259,4 @@ shinyUI(
   )
 )
 )
+

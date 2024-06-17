@@ -72,7 +72,7 @@ shinyServer(function(input, output, session) {
       scale_fill_gradient(low = "white", high = "red")
   })
 
-  output$map <- renderLeaflet({
+  output$overview_map <- renderLeaflet({
     unique_data=NOC_summary_with_map
     # top3_res=datasetInput_for_map2()[2:11]
 
@@ -159,50 +159,139 @@ shinyServer(function(input, output, session) {
     m
   })
 ### sport rank ####
-  output$rank_dynamic_html <- renderUI({
+output$global_rank_table <- renderDataTable({
     req(input$rank_Sports)  # 確保有選擇運動
-    req(input$rank_Rank)  # 確保有選擇名次
     Sport=input$rank_Sports
-    topNth=input$rank_Rank
-    if(Sport=="All"){
-      D=data[!is.na(data),]
-    }else{
-      D=data[which(data$Sport==Sport),]
-    }
-     D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))%>%head(topNth)
+    D=SPORTS_RANK[[Sport]]
 
-    HTML(
-      paste0(
-        "<table class='content-table-full-page'>",
-        "<thead>",
-        "<tr>",
-        "<th style='text-align: center;'>NOC</th>",
-        "<th style='text-align: center; color: gold;'>🥇Gold</th>",
-        "<th style='text-align: center; color: seashell;'>🥈Silver</th>",
-        "<th style='text-align: center; color: brown;'>🥉Bronze</th>",
-        "</tr>",
-        "</thead>",
-        "<tbody>",
-        paste(apply(D, 1, function(row) {
-            paste0(
-            "<tr>",
-            "<td style='text-align: center;'>
-              <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
-              <p style='font-size: 15px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",noc[which(noc$NOC==row[1]),2],"</p>
-            </td>",
-            "<td style='text-align: center;'>", row[2], "</td>",
-            "<td style='text-align: center;'>", row[3], "</td>",
-            "<td style='text-align: center;'>", row[4], "</td>",
-            "</tr>"
-            )
-        }), collapse = ""),
-        "</tbody>",
-        "</table>"
+    for (i in 1:nrow(D)){
       
-      )
-    )
+      n=as.character(D[i,1])
+      index=which(ALL_NOC==n)
+      if(length(index)==0){
+        D[i,1]=""
+        next
+      }
+      D[i,1]=NOC_HTML[index]
+ 
+    }
+    colnames(D)[1:4]=c("Region","🥇Gold","🥈Silver","🥉Bronze")
+    DT::datatable(D,escape = FALSE)
+})
 
-  })
+output$ex_country_map<-renderLeaflet({
+    req(input$explore_Country)  # 確保有選擇國家
+    target_noc=input$explore_Country
+    index=which(NOC_summary_with_map$NOC==target_noc)
+    if(length(index)==0){
+        leaflet() %>%
+          addTiles()  # 添加基本地圖圖層
+    }else{
+      unique_data=NOC_summary_with_map[index,]
+
+      iconUrl=paste0("Country_image/", unique_data$NOC, ".png")
+      for (i in 1:length(iconUrl)){
+        if (!file.exists(iconUrl[i])){
+          iconUrl[i] <- "Country_image/default.png"
+        }
+      }
+      target_lng=unique_data$long
+      target_lat=unique_data$lat
+
+      
+      UserIcon <- icons(
+        iconUrl = iconUrl,
+        iconWidth = 22, iconHeight = 11
+      )
+
+
+      m <- leaflet(data = unique_data) %>%
+        addTiles() %>%
+        addMarkers(~long, ~lat, icon = UserIcon, 
+                  
+        label = ~region,
+        labelOptions = labelOptions(noHide = FALSE, direction = 'auto', style = list('color' = 'black', 'font-size' = '16px')))%>%
+        setView(lng = target_lng, lat = target_lat, zoom = 3)
+      m
+    }
+  
+})
+output$country_rank_table <- renderDataTable({
+    req(input$explore_Country)  # 確保有選擇國家
+    target_noc=input$explore_Country
+    #建立一個空的dataframe，放置運動的排名  
+    df=data.frame(global_rank=numeric(),Sport=character(),Sport_html=character(),Gold=numeric(),Silver=numeric(),Bronze=numeric())
+    
+    for(s in ALLSPORT){
+      D=SPORTS_RANK[[s]]
+      #找到該國家的排名
+      index <- which(D$NOC==target_noc)
+      if (length(index) == 1) {
+        df=rbind(df,data.frame(global_rank=index,Sport=s,Sport_html=SPORT_HTML[which(ALLSPORT==s)]
+                  ,Gold=D[index,2],Silver=D[index,3],Bronze=D[index,4]))
+      }
+      
+    }
+    if(nrow(df)==0){
+      html_df=df[,c(1,3,4,5,6)]
+      #改column名稱
+      colnames(html_df)=c("🏆rank","Sport","🥇Gold","🥈Silver","🥉Bronze")
+      DT::datatable(html_df,escape = FALSE,rownames= FALSE)
+    }else{
+      all=df[which(df$Sport=="All"),]
+      not_all=df[which(df$Sport!="All"),]
+      #sort by Golbal_rank
+      not_all=not_all[order(not_all$global_rank),]
+      df=rbind(all,not_all)
+      html_df=df[,c(1,3,4,5,6)]
+      #改column名稱
+      colnames(html_df)=c("🏆rank","Sport","🥇Gold","🥈Silver","🥉Bronze")
+      DT::datatable(html_df,escape = FALSE,rownames= FALSE)
+    }
+
+})
+# output$rank_dynamic_html <- renderUI({
+#     req(input$rank_Sports)  # 確保有選擇運動
+#     Sport=input$rank_Sports
+#     if(Sport=="All"){
+#       D=data[!is.na(data),]
+#     }else{
+#       D=data[which(data$Sport==Sport),]
+#     }
+#     D=D%>%group_by(Year,NOC,Sport,Event,Medal)%>%filter(!is.na(Medal))%>%summarise(n=1)%>%group_by(NOC)%>%summarise(Gold=sum(Medal=="Gold"),Silver=sum(Medal=="Silver"),Bronze=sum(Medal=="Bronze"),Weight=sum(Medal=="Bronze")+1.5*sum(Medal=="Silver")+2*sum(Medal=="Gold"))%>%arrange(desc(Weight))
+
+#     HTML(
+#       paste0(
+#         "<table class='content-table-full-page'>",
+#         "<thead>",
+#         "<tr>",
+#         "<th style='text-align: center;'>NOC</th>",
+#         "<th style='text-align: center; color: gold;'>🥇Gold</th>",
+#         "<th style='text-align: center; color: seashell;'>🥈Silver</th>",
+#         "<th style='text-align: center; color: brown;'>🥉Bronze</th>",
+#         "</tr>",
+#         "</thead>",
+#         "<tbody>",
+#         paste(apply(D, 1, function(row) {
+#             paste0(
+#             "<tr>",
+#             "<td style='text-align: center;'>
+#               <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
+#               <p style='font-size: 15px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",noc[which(noc$NOC==row[1]),2],"</p>
+#             </td>",
+#             "<td style='text-align: center;'>", row[2], "</td>",
+#             "<td style='text-align: center;'>", row[3], "</td>",
+#             "<td style='text-align: center;'>", row[4], "</td>",
+#             "</tr>"
+#             )
+#         }), collapse = ""),
+#         "</tbody>",
+#         "</table>"
+      
+#       )
+#     )
+
+#   })
  
 
 
