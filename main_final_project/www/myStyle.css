@@ -16,7 +16,7 @@ body {
   border-color: transparent;
 }
 .navbar-default .navbar-brand {
-  color: #212121;
+  /* color: #212121; */
   font-weight: bold;
 }
 
@@ -67,12 +67,40 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 }
 /* end */
 
+/* Box */
 .box-header {
   text-align: center;
 }
 .box-title{
   font-weight: bold;
 }
+.box.box-solid.box-warning>.box-header {
+
+  background-color: #f1c2c2;
+}
+.box.box-solid.box-warning {
+  border: 1px solid #f1c2c2;
+}
+
+.box.box-solid.box-info>.box-header {
+
+  background-color: #f1c2c2;
+}
+.box.box-solid.box-info {
+  border: 1px solid #f1c2c2;
+}
+
+
+.box.box-solid.box-success>.box-header {
+
+  background-color: #f1c2c2;
+}
+.box.box-solid.box-success {
+  border: 1px solid #f1c2c2;
+}
+
+
+/* end */
 
 
 .mytitle {

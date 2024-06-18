@@ -140,8 +140,9 @@ country_info_ui<- fluidPage(
                         selected = "TPE"
                     ),
                 ),
-                box(height = 236,width = NULL,title = "簡介", status ="info", solidHeader = TRUE,
-                    p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                box(height = 236,width = NULL,title = "解釋", status ="info", solidHeader = TRUE,
+                    p("本頁面提供了單個國家的地理資訊和各項運動的獲獎情況，使用者可以在上方選擇國家，查看該國家的相關資訊。",
+                        style="font-size: 18px;padding: 10px 10px;")
                 )
             ),
             box(width = 6,title = "地理資訊", status ="info", solidHeader = TRUE,
@@ -202,10 +203,10 @@ Top5_Bot5_ui<-fluidPage(
                       title = "解釋", status = "info",
                       p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
                     ),  
-                    box(width = 12, title = "前五後五選手四分位數圖", status = "success", solidHeader = TRUE,
+                    box(width = 6, title = "前五後五選手四分位數圖", status = "success", solidHeader = TRUE,
                         plotlyOutput("Top5_Bot5_height")
                     ),
-                    box(width = 12, title = "前五後五選手四分位數圖", status = "success", solidHeader = TRUE,
+                    box(width = 6, title = "前五後五選手四分位數圖", status = "success", solidHeader = TRUE,
                         plotlyOutput("Top5_Bot5_weight")
                     )
             )
@@ -231,10 +232,10 @@ selectSport_ui<-fluidPage(
                             selected = "Basketball"
                     ),
                 ),
-                box(width = 12, title = "性別比例圓餅圖", status = "success", solidHeader = TRUE,
+                box(width = 6, title = "性別比例圓餅圖", status = "success", solidHeader = TRUE,
                     plotlyOutput("selectSport_pie")
                 ),
-                box(width = 12, title = "身高和體重的四分位數圖", status = "success", solidHeader = TRUE,
+                box(width = 6, title = "身高和體重的四分位數圖", status = "success", solidHeader = TRUE,
                     plotlyOutput("selectSport_height_weight")
                 ),
             )
