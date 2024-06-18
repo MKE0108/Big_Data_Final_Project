@@ -1,4 +1,6 @@
 mainPanel(width = 12,
+    #建立一個空白padding
+
     fluidRow(
         column(width = 12,offset = 1,
             box(width = 5,height = 150,

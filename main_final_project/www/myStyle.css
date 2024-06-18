@@ -1,0 +1,125 @@
+#show_body {
+    background-color: #94857c61; /* Change to your preferred color */
+    /* 圓角 */
+    border-radius: 10px;
+}
+#background{
+  background-color: #e4c6af;
+}
+/* NavbarPage */
+.navbar-default {
+  background-color: #f7d3d3;
+  border-color: transparent;
+}
+.navbar-static-top {
+  border-radius: 30px;
+}
+/* 選單選擇時 */
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+  color: #212121;
+  background-color: #da8282;
+}
+/* 多重選單按下時 */
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
+  background-color: #ad8989;
+  color: #212121;
+}
+.navbar-nav>li>a {
+  font-weight: bold;
+  font-size: 20px;
+}
+/* NavbarPage end */
+
+/* 拉桿 */
+.slider-animate-button {
+  color: #f32121;
+}
+.irs--shiny .irs-bar {
+
+  background: #e58142;
+
+}
+.irs-to, .irs--shiny .irs-single {
+
+  background-color: #e1602f;
+
+}
+/* 拉桿END */
+
+/* radio input */
+input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] {
+
+  margin-top: 12px;
+}
+
+.radio label span {
+  font-size: 20px; /* Adjust the size as needed */
+}
+/* end */
+
+.box-header {
+  text-align: center;
+}
+.box-title{
+  font-weight: bold;
+}
+
+
+.mytitle {
+    /* 字體 */
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    /* color: #343232; */
+    color: #3a3a3a;
+    margin-bottom: 20px;
+    padding: 10px;
+    /* 背景 */
+    background-color: #e29a9054;
+    /* 圓角 */
+    border-radius: 10px;
+    /* SHADOWING */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.01);
+}
+.jhr{
+    display: inline;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+.content-table {
+  border-collapse: collapse;
+  margin: 5px 0;
+  font-size: 0.9em;
+  min-width: 60px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table th {
+  padding: 6px 7px;
+}
+
+.content-table td {
+  padding: 4px 6px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
