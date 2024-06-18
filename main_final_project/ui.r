@@ -12,71 +12,82 @@ source("global.r")
 
 
 ### page 1 ####
-global_participation_ui<-fluidPage( id = "show_body",
-#div padding
-div(style="padding: 15px 0px; width: '100%'",),
-fluidRow(
-        column(width = 12,offset = 0,
-            box(width = 6,height = 150,
-            title = "年份", status = "warning", solidHeader = TRUE,
-            sliderInput("Map1_year", NULL,  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
-            ),
-            box(width = 6,height = 150,
-            title = "解釋", status = "info", solidHeader = TRUE,
-            p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
-            ),
-
-        )
-),
-fluidRow(
-    column(width = 12,offset = 0,
-        box(width = 12,
-                title = "地圖", status = "success", solidHeader = TRUE,
-                plotOutput("Year_Map_Plot")
-        ),
-    )
-),
-
-) 
-### page 3 ####
-history_ui <- fluidPage(id = "show_body",
-div(style="padding: 15px 0px; width: '100%'",),
-fluidRow(
-    column(12,
-            column(4,
-                box(width = NULL,height = 140,  
-                    title = "季節", status = "warning",solidHeader = TRUE,
-                    radioButtons("history_season", NULL,
-                        choices = list("⛱️Summer Olympics" = "Summer",
-                                        "❄️Winter Twitter" = "Winter"),
-                        selected = "Summer")
-                ),                
-                box(width = NULL,height = 305,
-                    title = "解釋", status = "info",solidHeader = TRUE,
+global_participation_ui<-fluidPage(
+    div(class = "mytitle", "🌍️各國參賽人數"),
+    fluidPage( id = "show_body",
+        #div padding
+        div(style="padding: 15px 0px; width: '100%'",),
+        fluidRow(
+                column(width = 12,offset = 0,
+                    box(width = 6,height = 150,
+                    title = "年份", status = "warning", solidHeader = TRUE,
+                    sliderInput("Map1_year", NULL,  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
+                    ),
+                    box(width = 6,height = 150,
+                    title = "解釋", status = "info", solidHeader = TRUE,
                     p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
-                ),
-            ),
-            column(8,
-                box(width = NULL,
-                        title = "運動/體重/身高", status = "success", solidHeader = TRUE,
-                        plotlyOutput("history_height_weight")
+                    ),
+
+                )
+        ),
+        fluidRow(
+            column(width = 12,offset = 0,
+                box(width = 12,
+                        title = "地圖", status = "success", solidHeader = TRUE,
+                        plotOutput("Year_Map_Plot")
                 ),
             )
-        )
-    ),
-fluidRow(
-    column(12,
-            box(width = 6,
-                title = "歷史女性得牌數量", status = "success", solidHeader = TRUE,
-                plotlyOutput("history_plot")
-            ),                
-            box(width = 6,
-                title = "歷史金牌獲獎者年紀", status = "success", solidHeader = TRUE,
-                plotlyOutput("history_gold_age")
-            ),
         ),
-    ),
+
+    ) 
 )
+
+
+
+### page 3 ####
+history_ui <- fluidPage(
+    div(class = "mytitle", "🏛️歷史回顧"),
+    fluidPage(id = "show_body",
+        div(style="padding: 15px 0px; width: '100%'",),
+        fluidRow(
+            column(12,
+                    column(4,
+                        box(width = NULL,height = 140,  
+                            title = "季節", status = "warning",solidHeader = TRUE,
+                            radioButtons("history_season", NULL,
+                                choices = list("⛱️Summer Olympics" = "Summer",
+                                                "❄️Winter Twitter" = "Winter"),
+                                selected = "Summer")
+                        ),                
+                        box(width = NULL,height = 305,
+                            title = "解釋", status = "info",solidHeader = TRUE,
+                            p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                        ),
+                    ),
+                    column(8,
+                        box(width = NULL,
+                                title = "運動/體重/身高", status = "success", solidHeader = TRUE,
+                                plotlyOutput("history_height_weight")
+                        ),
+                    )
+                )
+            ),
+        fluidRow(
+            column(12,
+                    box(width = 6,
+                        title = "歷史女性得牌數量", status = "success", solidHeader = TRUE,
+                        plotlyOutput("history_plot")
+                    ),                
+                    box(width = 6,
+                        title = "歷史金牌獲獎者年紀", status = "success", solidHeader = TRUE,
+                        plotlyOutput("history_gold_age")
+                    ),
+                ),
+            ),
+    )
+)
+
+
 ### page 2 ####
 ex_country_map_ui <- fluidPage(
     div(class = "mytitle", "🗺️地圖總覽"),
@@ -246,7 +257,7 @@ shinyUI(
 
     navbarPage(
       theme = shinytheme("paper"),
-      title=div(img(src="https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/main_icon.png", height = "25", style = "margin-right: 5px;"), "Olympic"),
+      title=div(img(src="https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/main_icon_1.png", height = "25", style = "margin-right: 5px;"), "Olympic"),
       tabPanel("🌍️各國參賽人數",
         global_participation_ui
       ),

@@ -3,14 +3,24 @@
     /* 圓角 */
     border-radius: 10px;
 }
+body {
+  background-color: #e4c6af; /* Change to your preferred color */
+}
 #background{
   background-color: #e4c6af;
 }
 /* NavbarPage */
 .navbar-default {
-  background-color: #f7d3d3;
+  /* background-color: #f7d3d3; */
+  background-color: #ffadad;
   border-color: transparent;
 }
+.navbar-default .navbar-brand {
+  color: #212121;
+  font-weight: bold;
+}
+
+
 .navbar-static-top {
   border-radius: 30px;
 }
