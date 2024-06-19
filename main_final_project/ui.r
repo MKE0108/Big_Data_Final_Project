@@ -116,7 +116,7 @@ sport_country_ui <- fluidPage(
                 ),
             ),
             box(width = 12,title = "排行榜", status ="success", solidHeader = TRUE,
-                DT::dataTableOutput("global_rank_table")
+                dataTableOutput("global_rank_table")
             )
     )
 )
@@ -149,7 +149,7 @@ country_info_ui<- fluidPage(
                 leafletOutput("ex_country_map", width = "100%", height = "300px")
             ),
             box(width = 12,title = "排行榜", status ="success", solidHeader = TRUE,
-                DT::dataTableOutput("country_rank_table")
+                dataTableOutput("country_rank_table")
             )
     )
 
