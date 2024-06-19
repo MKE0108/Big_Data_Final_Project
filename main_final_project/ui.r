@@ -55,8 +55,8 @@ history_ui <- fluidPage(
                         box(width = NULL,height = 140,  
                             title = "季節", status = "warning",solidHeader = TRUE,
                             radioButtons("history_season", NULL,
-                                choices = list("⛱️Summer Olympics" = "Summer",
-                                                "❄️Winter Twitter" = "Winter"),
+                                choices = list("⛱️Summer" = "Summer",
+                                                "❄️Winter" = "Winter"),
                                 selected = "Summer")
                         ),                
                         box(width = NULL,height = 305,
@@ -164,8 +164,8 @@ Full_season_ui<-fluidPage(
                   box(width = 6,height = 150,
                               title = "季節", status = "warning", solidHeader = TRUE,
                               radioButtons("Full_season_season", NULL,
-                        choices = list("⛱️Summer Olympics" = "Summer",
-                                        "❄️Winter Twitter" = "Winter"),
+                        choices = list("⛱️Summer" = "Summer",
+                                        "❄️Winter" = "Winter"),
                                   selected = "Summer")
                     ),
                     box(width = 6,height = 150,
@@ -195,8 +195,8 @@ Top5_Bot5_ui<-fluidPage(
                   box(width = 6,height = 150, solidHeader = TRUE,
                               title = "季節", status = "warning",
                               radioButtons("Top5_Bot5_season", NULL,
-                        choices = list("⛱️Summer Olympics" = "Summer",
-                                        "❄️Winter Twitter" = "Winter"),
+                        choices = list("⛱️Summer" = "Summer",
+                                        "❄️Winter" = "Winter"),
                                   selected = "Summer")
                     ),
                     box(width = 6,height = 150, solidHeader = TRUE,
@@ -250,7 +250,7 @@ shinyUI(
     shinyWidgets::useShinydashboard(),
     tags$link(rel = "stylesheet", type = "text/css", href = "myStyle.css"),
     tags$head(
-       tags$script(src = "http://d3js.org/d3.v3.min.js"),
+       tags$script(src = "https://cdn.jsdelivr.net/npm/d3@7"),
     ),
 
     # 導覽頁padding
@@ -258,7 +258,7 @@ shinyUI(
 
     navbarPage(
       theme = shinytheme("paper"),
-      title=div(img(src="https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/main_icon_1.png", height = "25", style = "margin-right: 5px;"), "Olympic"),
+      title=div(img(src="main_icon_1.png", height = "25", style = "margin-right: 5px;"), "Olympic Analysis"),
       
       
       navbarMenu("🔍️探索國家",

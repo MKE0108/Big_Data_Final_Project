@@ -28,9 +28,9 @@ for(s in ALLSPORT){
   #s轉成小寫
   ss=tolower(s)
   if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
-    SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",ss),"_pictogram.png' width='30px'><div class='jhr'></div>", s))
+    SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","Sports_image/",gsub(" ","_",ss),"_pictogram.png' width='30px'><div class='jhr'></div>", s))
   }else{
-    SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png' width='30px'><div class='jhr'></div>", s))
+    SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","Sports_image/default.png' width='30px'><div class='jhr'></div>", s))
   }
 }
 
@@ -56,27 +56,27 @@ for(n in ALL_NOC){
   index=which(noc$NOC==n)
   
   if(length(index)==0){
-    NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"( ? )"))
+    NOC_HTML <- c(NOC_HTML,paste0("<img src='","Country_image/default.png' width='30px'><div class='jhr'></div>", n,"( ? )"))
   }else{
     region_name=noc[index,2]
     if(is.na(region_name)){
       region_name="?" 
     }
-    if(file.exists(paste0("Country_image/",n,".png"))){
-      NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",n,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+    if(file.exists(paste0("www/Country_image/",n,".png"))){
+      NOC_HTML <- c(NOC_HTML,paste0("<img src='","Country_image/",n,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
     }
     else{
         flag=0
         for(possible_noc in noc$NOC[which(noc$region==region_name)]){
           if(file.exists(paste0("Country_image/",possible_noc,".png"))){
-            NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+            NOC_HTML <- c(NOC_HTML,paste0("<img src='","Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
             flag=1
             break
           }
         }
 
         if(flag==0){
-          NOC_HTML <- c(NOC_HTML,paste0("<img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
+          NOC_HTML <- c(NOC_HTML,paste0("<img src='","Country_image/default.png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
         }
     }
 
@@ -122,9 +122,9 @@ for(s in ALLSPORT){
   #s轉成小寫
   ss=tolower(s)
   if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
-      Sport_url <- c(Sport_url, paste0("https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",ss),"_pictogram.png"))
+      Sport_url <- c(Sport_url, paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))
   }else{
-      Sport_url <- c(Sport_url,paste0("https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png"))
+      Sport_url <- c(Sport_url,paste0("Sports_image/default.png"))
   }
 }
 names(Sport_url) <- ALLSPORT

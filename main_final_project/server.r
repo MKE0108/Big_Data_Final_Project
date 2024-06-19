@@ -80,18 +80,18 @@ shinyServer(function(input, output, session) {
     for(n in unique_data$NOC){
         region_name=noc[which(noc$NOC==n),2]
         if(length(region_name)==0){
-          iconUrl <- c(iconUrl, "Country_image/default.png")
+          iconUrl <- c(iconUrl, "www/Country_image/default.png")
         }else {
           flag=0
           for(possible_noc in noc$NOC[which(noc$region==region_name)]){
-            if(file.exists(paste0("Country_image/",possible_noc,".png"))){
-              iconUrl <- c(iconUrl, paste0("Country_image/", possible_noc, ".png"))
+            if(file.exists(paste0("www/Country_image/",possible_noc,".png"))){
+              iconUrl <- c(iconUrl, paste0("www/Country_image/", possible_noc, ".png"))
               flag=1
               break
             }
           }
           if(flag==0){
-            iconUrl <- c(iconUrl, "Country_image/default.png")
+            iconUrl <- c(iconUrl, "www/Country_image/default.png")
           }
         }
     }
@@ -137,7 +137,7 @@ shinyServer(function(input, output, session) {
 
       "<tr>",
       "<td style='text-align: center;'>
-        <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport1)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
+        <img src='","Sports_image/",gsub(" ","_",tolower(Sport1)), "_pictogram.png' onerror='this.onerror=null;this.src=\"Sports_image/default.png\"' width='30px'>
         <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport1,"</p>
       </td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold1,"</td>",
@@ -146,7 +146,7 @@ shinyServer(function(input, output, session) {
       "</tr>",
       "<tr>",
       "<td style='text-align: center;'>
-         <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport2)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
+         <img src='","Sports_image/",gsub(" ","_",tolower(Sport2)), "_pictogram.png' onerror='this.onerror=null;this.src=\"Sports_image/default.png\"' width='30px'>
          <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport2,"</p>",
       "</td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold2,"</td>",
@@ -155,7 +155,7 @@ shinyServer(function(input, output, session) {
       "</tr>",
       "<tr>",
       "<td style='text-align: center;'>
-         <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/",gsub(" ","_",tolower(Sport3)), "_pictogram.png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Sports_image/default.png\"' width='30px'>
+         <img src='","Sports_image/",gsub(" ","_",tolower(Sport3)), "_pictogram.png' onerror='this.onerror=null;this.src=\"Sports_image/default.png\"' width='30px'>
          <p style='font-size: 10px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",Sport3,"</p>",
       "</td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold3,"</td>",
@@ -202,7 +202,7 @@ output$ex_country_map<-renderLeaflet({
     }else{
       unique_data=NOC_summary_with_map[index,]
 
-      iconUrl=paste0("Country_image/", unique_data$NOC, ".png")
+      iconUrl=paste0("www/Country_image/", unique_data$NOC, ".png")
       for (i in 1:length(iconUrl)){
         if (!file.exists(iconUrl[i])){
           iconUrl[i] <- "Country_image/default.png"
@@ -292,7 +292,7 @@ output$country_rank_table <- renderDataTable({
 #             paste0(
 #             "<tr>",
 #             "<td style='text-align: center;'>
-#               <img src='","https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
+#               <img src='","Country_image/",row[1], ".png' onerror='this.onerror=null;this.src=\"Country_image/default.png\"' style='margin-top: 10px;' width='50px'>
 #               <p style='font-size: 15px; margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>",noc[which(noc$NOC==row[1]),2],"</p>
 #             </td>",
 #             "<td style='text-align: center;'>", row[2], "</td>",
