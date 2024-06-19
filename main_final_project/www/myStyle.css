@@ -150,13 +150,12 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .content-table {
   border-collapse: collapse;
   margin: 5px 0;
-  font-size: 0.9em;
+  font-size: 1.1em;
   min-width: 60px;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
-
 .content-table thead tr {
   background-color: #009879;
   color: #ffffff;
@@ -170,6 +169,8 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 
 .content-table td {
   padding: 4px 6px;
+  text-align: center;
+  font-size: 16px;
 }
 
 .content-table tbody tr {

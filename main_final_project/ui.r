@@ -25,7 +25,8 @@ global_participation_ui<-fluidPage(
                     ),
                     box(width = 6,height = 150,
                     title = "解釋", status = "info", solidHeader = TRUE,
-                    p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                    p("來自不同國家的運動員數量隨著時間的變化",
+                     style="font-size: 18px;padding: 10px 10px;")
                     ),
 
                 )
@@ -94,7 +95,7 @@ ex_country_map_ui <- fluidPage(
     fluidPage(id = "show_body",
         div(style="padding: 15px 0px; width: '100%'",),
         box(width = 12,title = NULL, status ="success", solidHeader = TRUE,
-            leafletOutput("overview_map", width = "100%")
+            leafletOutput("overview_map", width = "100%",height = "600px")
         )
     )
 )
@@ -248,6 +249,7 @@ selectSport_ui<-fluidPage(
 shinyUI(
   fluidPage(id="background",
     shinyWidgets::useShinydashboard(),
+    tags$head(tags$link(rel="shortcut icon", href="main_icon_1.png")),
     tags$link(rel = "stylesheet", type = "text/css", href = "myStyle.css"),
     tags$head(
        tags$script(src = "https://cdn.jsdelivr.net/npm/d3@7"),

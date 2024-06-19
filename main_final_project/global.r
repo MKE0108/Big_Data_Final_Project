@@ -68,7 +68,7 @@ for(n in ALL_NOC){
     else{
         flag=0
         for(possible_noc in noc$NOC[which(noc$region==region_name)]){
-          if(file.exists(paste0("Country_image/",possible_noc,".png"))){
+          if(file.exists(paste0("www/Country_image/",possible_noc,".png"))){
             NOC_HTML <- c(NOC_HTML,paste0("<img src='","Country_image/",possible_noc,".png' width='30px'><div class='jhr'></div>", n,"(",region_name,")"))
             flag=1
             break

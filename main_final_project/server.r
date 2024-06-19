@@ -126,7 +126,7 @@ shinyServer(function(input, output, session) {
       "<tbody>",
       "<tr>",
       "<td style='text-align: center;'>
-        <p style='font-size: 12px;margin-top: 3px ;margin-bottom:3px;font-weight: bold;'>","ALL","</p>
+        <p style='font-size: 15px;margin-top: 16px ;margin-bottom:12px;font-weight: bold;'>","ALL","</p>
       </td>",
       "<td style='text-align: center;font-weight: bold;'>",Gold,"</td>",
       "<td style='text-align: center;font-weight: bold;'>",Silver,"</td>",
@@ -205,7 +205,7 @@ output$ex_country_map<-renderLeaflet({
       iconUrl=paste0("www/Country_image/", unique_data$NOC, ".png")
       for (i in 1:length(iconUrl)){
         if (!file.exists(iconUrl[i])){
-          iconUrl[i] <- "Country_image/default.png"
+          iconUrl[i] <- "www/Country_image/default.png"
         }
       }
       target_lng=unique_data$long
@@ -404,7 +404,10 @@ output$country_rank_table <- renderDataTable({
           ungroup() 
         data <- filtered_data
         gender_counts <- table(data$Sex)
-        
+        old_names=names(gender_counts)
+        new_names = gsub("F", "Female🚺", old_names)
+        new_names = gsub("M", "Male🚹", new_names)
+        names(gender_counts) = new_names
         gender_pie <- plot_ly(labels = names(gender_counts), values = as.numeric(gender_counts), type = 'pie',
                               marker = list(colors = c('#FF9999','#66b3ff')), # 自訂顏色，例如粉色和藍色
                               textinfo = 'label+percent',
@@ -595,7 +598,13 @@ output$country_rank_table <- renderDataTable({
           ungroup() 
       data <- filtered_data
       gender_counts <- table(data$Sex)
-        
+      #replace gender_counts names "F" to "Female"
+      old_names=names(gender_counts)
+      new_names = gsub("F", "Female🚺", old_names)
+      new_names = gsub("M", "Male🚹", new_names)
+      names(gender_counts) = new_names
+
+      
       gender_pie <- plot_ly(labels = names(gender_counts), values = as.numeric(gender_counts), type = 'pie',
                               marker = list(colors = c('#FF9999','#66b3ff')), # 自訂顏色，例如粉色和藍色
                               textinfo = 'label+percent',
