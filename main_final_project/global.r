@@ -8,26 +8,26 @@ library(plotly)
 library(RColorBrewer)
 library(htmlwidgets)
 library(magrittr)
-data=read.csv("./athlete_events.csv",sep=",",header=T)
-noc=read.csv("./noc_regions.csv",sep=",",header=T)
+data=read.csv("./csv/athlete_events.csv",sep=",",header=T)
+noc=read.csv("./csv/noc_regions.csv",sep=",",header=T)
 
 ### for 地圖數據 ####
 data_regions <- data %>% 
   left_join(noc,by="NOC") %>%
   filter(!is.na(region))
 Map1_Year_sel=sort(unique(data_regions$Year))
-if(!file.exists("NOC_summary_with_map.csv")){
+if(!file.exists("csv/NOC_summary_with_map.csv")){
   source("Gen_NOC_summary_with_map.R")
 }
 
-NOC_summary_with_map= read.csv("NOC_summary_with_map.csv", row.names = 1)
+NOC_summary_with_map= read.csv("csv/NOC_summary_with_map.csv", row.names = 1)
 ### for 運動強國 ####
 ALLSPORT=c("All",sort(na.omit(unique(data$Sport))))
 SPORT_HTML=c()
 for(s in ALLSPORT){
   #s轉成小寫
   ss=tolower(s)
-  if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
+  if(file.exists(paste0("www/Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
     SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","Sports_image/",gsub(" ","_",ss),"_pictogram.png' width='30px'><div class='jhr'></div>", s))
   }else{
     SPORT_HTML <- c(SPORT_HTML, paste0("<img src='","Sports_image/default.png' width='30px'><div class='jhr'></div>", s))
@@ -35,17 +35,17 @@ for(s in ALLSPORT){
 }
 
 
-if(!file.exists("Sports_rank/Tennis.csv")){
+if(!file.exists("csv/Sports_rank/Tennis.csv")){
   source("Gen_Sports_Rank.R")
 }
 Sports=data%>%select(Sport)%>%distinct()%>%arrange(Sport)
 
 SPORTS_RANK=c()
 for(s in Sports$Sport){
-  D=read.csv(paste0("./Sports_rank/",s,".csv"))
+  D=read.csv(paste0("csv/Sports_rank/",s,".csv"))
   SPORTS_RANK[[s]]=D
 }
-D=read.csv(paste0("./Sports_rank/","All",".csv"))
+D=read.csv(paste0("csv/Sports_rank/","All",".csv"))
 SPORTS_RANK[["All"]]=D
 
 
@@ -121,7 +121,7 @@ Sport_url=c()
 for(s in ALLSPORT){
   #s轉成小寫
   ss=tolower(s)
-  if(file.exists(paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
+  if(file.exists(paste0("www/Sports_image/",gsub(" ","_",ss),"_pictogram.png"))){
       Sport_url <- c(Sport_url, paste0("Sports_image/",gsub(" ","_",ss),"_pictogram.png"))
   }else{
       Sport_url <- c(Sport_url,paste0("Sports_image/default.png"))

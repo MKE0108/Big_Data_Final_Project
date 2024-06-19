@@ -75,7 +75,7 @@ results_df=data.frame(results_df)
 unique_data <- left_join(unique_data, results_df, by = "NOC")
 
 #save csv
-write.csv(unique_data, "NOC_summary_with_map.csv", row.names = TRUE)
+write.csv(unique_data, "csv/NOC_summary_with_map.csv", row.names = TRUE)
 
 
 
