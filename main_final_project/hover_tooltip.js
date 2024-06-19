@@ -13,7 +13,7 @@ function(el) {
       var xPixel = pt.xaxis.l2p(x) + pt.xaxis._offset;
       var yPixel = pt.yaxis.l2p(y) + pt.yaxis._offset;
       // Insert the base64 encoded image
-      var img = "<img src='" +  pt.customdata + "' width=200>";
+      var img = "<img src='" +  pt.customdata + "' width=100>";
       tooltip.html(img)
         .style("position", "absolute")
         .style("left", xPixel + "px")
