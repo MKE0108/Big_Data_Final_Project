@@ -1,18 +1,40 @@
+:root {
+  --main-bg-color: #fffaee;
+  /* --show-body-color: #94857c61; */
+  --show-body-color: #b3b3b37c;
+  --front-color: #212121;
+  
+  /* navbar */
+  --first-color: #219C90;
+  /*Page title background*/
+  --first-color-light: #219C9061;
+  /* success box title background*/
+  --second-color: #f87878;
+  /* inbox widgets */
+  --third-color:#FFC700;
+  /* warning info box title background */
+  --fourth-color: #FFC700;
+}
+
+/* 主要顏色 */
 #show_body {
-    background-color: #94857c61; /* Change to your preferred color */
-    /* 圓角 */
+    background-color: var(--show-body-color); /* Use the color variable */
     border-radius: 10px;
 }
+
 body {
-  background-color: #e4c6af; /* Change to your preferred color */
+  background-color: var(--main-bg-color); /* Use the color variable */
 }
+
 #background{
-  background-color: #e4c6af;
+  background-color: var(--main-bg-color); /* Use the color variable */
 }
+/* end */
+
 /* NavbarPage */
 .navbar-default {
   /* background-color: #f7d3d3; */
-  background-color: #ffadad;
+  background-color: var(--first-color);
   border-color: transparent;
 }
 .navbar-default .navbar-brand {
@@ -26,34 +48,50 @@ body {
 }
 /* 選單選擇時 */
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
-  color: #212121;
-  background-color: #da8282;
+  color: var(--front-color);
+  background-color: var(--first-color);
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), var(--first-color);
 }
 /* 多重選單按下時 */
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
-  background-color: #ad8989;
-  color: #212121;
+  color: var(--front-color);
+  background-color: var(--first-color);
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--first-color);
 }
 .navbar-nav>li>a {
   font-weight: bold;
   font-size: 20px;
 }
+.navbar-default .navbar-nav>li>a{
+  color: #00000080;
+}
+.navbar-default .navbar-brand  {
+  color: var(--front-color);
+
+}
 /* NavbarPage end */
 
+
 /* 拉桿 */
-.slider-animate-button {
-  color: #f32121;
+
+/* 開始按鈕 */
+
+.glyphicon-play:before,.glyphicon-pause:before,
+.glyphicon-play:after ,.glyphicon-pause:after{
+    color: var(--third-color);
 }
+
+/* bar */
 .irs--shiny .irs-bar {
-
-  background: #e58142;
-
+  background-color: var(--third-color);
+  border-top: 1px var(--first-color-light);
+  border-bottom: 1px var(--first-color-light);
 }
+/* 當前數值 */
 .irs-to, .irs--shiny .irs-single {
-
-  background-color: #e1602f;
-
+  background-color: var(--third-color);
 }
+
 /* 拉桿END */
 
 /* radio input */
@@ -74,31 +112,23 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .box-title{
   font-weight: bold;
 }
-.box.box-solid.box-warning>.box-header {
+.box.box-solid.box-warning>.box-header ,.box.box-solid.box-info>.box-header {
 
-  background-color: #f1c2c2;
+  background-color: var(--fourth-color);
 }
-.box.box-solid.box-warning {
-  border: 1px solid #f1c2c2;
+.box.box-solid.box-warning,.box.box-solid.box-info {
+  border: 1px solid var(--fourth-color);
 }
 
-.box.box-solid.box-info>.box-header {
-
-  background-color: #f1c2c2;
-}
-.box.box-solid.box-info {
-  border: 1px solid #f1c2c2;
-}
 
 
 .box.box-solid.box-success>.box-header {
 
-  background-color: #f1c2c2;
+  background-color: var(--second-color);
 }
 .box.box-solid.box-success {
-  border: 1px solid #f1c2c2;
+  border: 1px solid var(--second-color);
 }
-
 
 /* end */
 
@@ -109,11 +139,11 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
     text-align: center;
     font-weight: bold;
     /* color: #343232; */
-    color: #3a3a3a;
+    color: var(--front-color);
     margin-bottom: 20px;
     padding: 10px;
     /* 背景 */
-    background-color: #e29a9054;
+    background-color: var(--first-color-light);
     /* 圓角 */
     border-radius: 10px;
     /* SHADOWING */
