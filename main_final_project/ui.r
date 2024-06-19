@@ -19,29 +19,33 @@ global_participation_ui<-fluidPage(
         div(style="padding: 15px 0px; width: '100%'",),
         fluidRow(
                 column(width = 12,offset = 0,
-                    box(width = 6,height = 150,
-                    title = "年份", status = "warning", solidHeader = TRUE,
-                    sliderInput("Map1_year", NULL,  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
-                    ),
-                    box(width = 6,height = 150,
-                    title = "解釋", status = "info", solidHeader = TRUE,
-                    p("來自不同國家的運動員數量隨著時間的變化",
-                     style="font-size: 18px;padding: 10px 10px;")
-                    ),
+                        box(width = 6,height = 150,
+                            title = "年份", status = "warning", solidHeader = TRUE,
+                            sliderInput("Map1_year", NULL,  min = min(Map1_Year_sel),max = max(Map1_Year_sel), value = min(Map1_Year_sel),step = 1, animate= animationOptions(interval=2500, loop=TRUE)) # 0616更新
+                        ),
+                        box(width = 6,height = 150,
+                            title = "解釋", status = "info", solidHeader = TRUE,
+                            div(id="page_intro", "來自不同國家的運動員數量隨著時間的變化")
+                        ),
+                ),
 
-                )
         ),
         fluidRow(
             column(width = 12,offset = 0,
                 box(width = 12,
-                        title = "地圖", status = "success", solidHeader = TRUE,
+                    title = "地圖", status = "success", solidHeader = TRUE,
+                    column(width = 10,offset = 1,
                         plotOutput("Year_Map_Plot")
+                    )    
+                        
                 ),
             )
         ),
-
-    ) 
+        ),
+        
 )
+    
+
 
 
 
@@ -62,12 +66,21 @@ history_ui <- fluidPage(
                         ),                
                         box(width = NULL,height = 305,
                             title = "解釋", status = "info",solidHeader = TRUE,
-                            p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                            div(id = "page_intro",
+                                p("運動員體重/身高圖表：", style = "font-weight:bold;margin-bottom: 5px;"),
+                                p("顯示不同身高和體重的奧運獎牌得主分佈情況。", style = "font-size: 15px;margin-bottom: 7px;"),
+                                p("歷史女性獲牌數量：", style = "font-weight:bold;margin-bottom: 5px;"),
+                                p("展示不同年份女性獲得奧運獎牌的數量變化。", style = "font-size: 15px;margin-bottom: 7px;"),
+                                p("歷史金牌獲獎者年齡分佈：", style = "font-weight:bold;margin-bottom: 5px;"),
+                                p("顯示金牌獲得者的年齡分佈情況。", style = "font-size: 15px;margin-bottom: 7px;")
+                                
+                            )
+                                                    
                         ),
                     ),
                     column(8,
                         box(width = NULL,
-                                title = "運動/體重/身高", status = "success", solidHeader = TRUE,
+                                title = "運動員體重/身高圖表", status = "success", solidHeader = TRUE,
                                 plotlyOutput("history_height_weight")
                         ),
                     )
@@ -76,11 +89,11 @@ history_ui <- fluidPage(
         fluidRow(
             column(12,
                     box(width = 6,
-                        title = "歷史女性得牌數量", status = "success", solidHeader = TRUE,
+                        title = "歷史女性獲牌數量", status = "success", solidHeader = TRUE,
                         plotlyOutput("history_plot")
                     ),                
                     box(width = 6,
-                        title = "歷史金牌獲獎者年紀", status = "success", solidHeader = TRUE,
+                        title = "歷史金牌獲獎者年齡分佈", status = "success", solidHeader = TRUE,
                         plotlyOutput("history_gold_age")
                     ),
                 ),
@@ -142,8 +155,7 @@ country_info_ui<- fluidPage(
                     ),
                 ),
                 box(height = 236,width = NULL,title = "解釋", status ="info", solidHeader = TRUE,
-                    p("本頁面提供了單個國家的地理資訊和各項運動的獲獎情況，使用者可以在上方選擇國家，查看該國家的相關資訊。",
-                        style="font-size: 18px;padding: 10px 10px;")
+                    div(id="page_intro", "本頁面提供了單個國家的地理資訊和各項運動的獲獎情況，使用者可以在上方選擇國家，查看該國家的相關資訊。")
                 )
             ),
             box(width = 6,title = "地理資訊", status ="info", solidHeader = TRUE,
@@ -171,7 +183,7 @@ Full_season_ui<-fluidPage(
                     ),
                     box(width = 6,height = 150,
                       title = "解釋", status = "info", solidHeader = TRUE,
-                      p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                      div(id="page_intro", "這是一些分析圖，包含奧運全季選手的性別比例、身高和體重四分位數圖。")
                     ),
 
                     box(width = 12, title = "性別比例圓餅圖", status = "success", solidHeader = TRUE,
@@ -202,7 +214,7 @@ Top5_Bot5_ui<-fluidPage(
                     ),
                     box(width = 6,height = 150, solidHeader = TRUE,
                       title = "解釋", status = "info",
-                      p("這是一個地圖，顯示了各國家在不同年份的奧運獲獎情況。")
+                      div(id="page_intro", "列出並比較運動員身高與體重前五與後五的運動。")
                     ),  
                     box(width = 6, title = "前五後五選手四分位數圖", status = "success", solidHeader = TRUE,
                         plotlyOutput("Top5_Bot5_height")
@@ -220,7 +232,7 @@ selectSport_ui<-fluidPage(
         div(style="padding: 15px 0px; width: '100%'",),
         fluidRow(
             column(12,
-                box(width = 12,title = "運動", status ="warning", solidHeader = TRUE,
+                box(width = 6,height = 150,title = "運動", status ="warning", solidHeader = TRUE,
                     pickerInput(
                             inputId = "selectSport_sport", 
                             label = NULL, 
@@ -232,6 +244,10 @@ selectSport_ui<-fluidPage(
                             ,
                             selected = "Basketball"
                     ),
+                ),
+                box(width = 6,height = 150, solidHeader = TRUE,
+                      title = "解釋", status = "info",
+                      div(id="page_intro", "針對各細項運動中運動員男女比例、身高與體重四分位數圖")
                 ),
                 box(width = 6, title = "性別比例圓餅圖", status = "success", solidHeader = TRUE,
                     plotlyOutput("selectSport_pie")

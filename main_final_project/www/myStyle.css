@@ -71,13 +71,27 @@ body {
 
 
 /*--- radio input ---*/
-input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] {
-
-  margin-top: 12px;
+.shiny-input-checkboxgroup label~.shiny-options-group, .shiny-input-radiogroup label~.shiny-options-group {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 20px;
 }
+input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] {
+  margin-top: 14px;
+}
+.radio label, .radio-inline label, .checkbox label, .checkbox-inline label {
+  padding-left: 30px;
+}
+.radio, .checkbox {
 
-.radio label span {
-  font-size: 20px; /* Adjust the size as needed */
+  display: inline;
+
+}
+.shiny-input-checkboxgroup label~.shiny-options-group, .shiny-input-radiogroup label~.shiny-options-group {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 20px;
+  margin-left: -11px;
 }
 /*--- radio input end ---*/
 
@@ -96,6 +110,11 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .box.box-solid.box-warning,.box.box-solid.box-info {
   border: 1px solid var(--third-color);
 }
+
+
+/* selectInput Position */
+.box.box-solid.box-warning
+
 
 /* box-widgets play-buttom*/
 .box.box-solid.box-warning .glyphicon-play:before,.box.box-solid.box-warning .glyphicon-pause:before,
@@ -123,7 +142,11 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 
 /* box-end */
 
-
+#page_intro{
+  font-size: 18px;
+  padding: 10px 10px;
+  text-align: center;
+}
 .mytitle {
     /* 字體 */
     font-size: 30px;
