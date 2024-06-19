@@ -12,12 +12,15 @@ function(el) {
       // Transform the data scale to the pixel scale
       var xPixel = pt.xaxis.l2p(x) + pt.xaxis._offset;
       var yPixel = pt.yaxis.l2p(y) + pt.yaxis._offset;
-      // Insert the base64 encoded image
-      var img = "<img src='" +  pt.customdata + "' width=100>";
+
+      // str to json
+      var json_data = JSON.parse(pt.customdata);
+      
+      var img = "<img src='" +  json_data.url + "' width=100><br><div style='text-align: center;'>" + json_data.name + "</div>";
       tooltip.html(img)
         .style("position", "absolute")
-        .style("left", xPixel + "px")
-        .style("top", yPixel + "px");
+        .style("left", xPixel*1.2 + "px")
+        .style("top", yPixel*1.2 + "px");
       // Fade in the image
       tooltip.transition()
         .duration(300)

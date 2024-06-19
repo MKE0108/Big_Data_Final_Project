@@ -5,15 +5,13 @@
   --front-color: #212121;
   
   /* navbar */
-  --first-color: #219C90;
+  --first-color: #f84e5c;
   /*Page title background*/
-  --first-color-light: #219C9061;
+  --first-color-light: #ff763161;
   /* success box title background*/
   --second-color: #f87878;
-  /* inbox widgets */
-  --third-color:#FFC700;
   /* warning info box title background */
-  --fourth-color: #FFC700;
+  --third-color: #FFC700;
 }
 
 /* 主要顏色 */
@@ -72,29 +70,7 @@ body {
 /* NavbarPage end */
 
 
-/* 拉桿 */
-
-/* 開始按鈕 */
-
-.glyphicon-play:before,.glyphicon-pause:before,
-.glyphicon-play:after ,.glyphicon-pause:after{
-    color: var(--third-color);
-}
-
-/* bar */
-.irs--shiny .irs-bar {
-  background-color: var(--third-color);
-  border-top: 1px var(--first-color-light);
-  border-bottom: 1px var(--first-color-light);
-}
-/* 當前數值 */
-.irs-to, .irs--shiny .irs-single {
-  background-color: var(--third-color);
-}
-
-/* 拉桿END */
-
-/* radio input */
+/*--- radio input ---*/
 input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] {
 
   margin-top: 12px;
@@ -103,7 +79,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .radio label span {
   font-size: 20px; /* Adjust the size as needed */
 }
-/* end */
+/*--- radio input end ---*/
 
 /* Box */
 .box-header {
@@ -111,13 +87,28 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 }
 .box-title{
   font-weight: bold;
+  color: var(--front-color);
 }
 .box.box-solid.box-warning>.box-header ,.box.box-solid.box-info>.box-header {
 
-  background-color: var(--fourth-color);
+  background-color: var(--third-color);
 }
 .box.box-solid.box-warning,.box.box-solid.box-info {
-  border: 1px solid var(--fourth-color);
+  border: 1px solid var(--third-color);
+}
+
+/* box-widgets play-buttom*/
+.box.box-solid.box-warning .glyphicon-play:before,.box.box-solid.box-warning .glyphicon-pause:before,
+.box.box-solid.box-warning .glyphicon-play:after ,.box.box-solid.box-warning .glyphicon-pause:after{
+    color: var(--third-color);
+}
+/* box-widgets process bar*/
+.box.box-solid.box-warning .irs--shiny .irs-bar,
+.box.box-solid.box-warning .irs-to, 
+.box.box-solid.box-warning .irs--shiny .irs-single  {
+  background-color: var(--third-color);
+  border-top: 1px var(--second-color);
+  border-bottom: 1px var(--second-color);
 }
 
 
@@ -130,7 +121,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
   border: 1px solid var(--second-color);
 }
 
-/* end */
+/* box-end */
 
 
 .mytitle {
@@ -149,6 +140,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
     /* SHADOWING */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.01);
 }
+
 .jhr{
     display: inline;
     vertical-align: middle;

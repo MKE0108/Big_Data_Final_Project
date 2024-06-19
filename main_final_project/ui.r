@@ -259,9 +259,8 @@ shinyUI(
     navbarPage(
       theme = shinytheme("paper"),
       title=div(img(src="https://raw.githubusercontent.com/MKE0108/Big_Data_Final_Project/main/main_final_project/main_icon_1.png", height = "25", style = "margin-right: 5px;"), "Olympic"),
-      tabPanel("🌍️各國參賽人數",
-        global_participation_ui
-      ),
+      
+      
       navbarMenu("🔍️探索國家",
         tabPanel("🗺️地圖總覽",
             ex_country_map_ui
@@ -273,11 +272,6 @@ shinyUI(
            country_info_ui
         )
       ),
-
-      tabPanel("🏛️歷史回顧",
-        history_ui
-      ),
-
       navbarMenu("👨‍👩‍👧身高體重性別",
         tabPanel("👟全季運動",
             Full_season_ui
@@ -290,7 +284,18 @@ shinyUI(
             selectSport_ui
         )
 
-      )
+      ),
+      
+      tabPanel("🌍️各國參賽人數",
+        global_participation_ui
+      ),
+
+
+      tabPanel("🏛️歷史回顧",
+        history_ui
+      ),
+
+
   )
 )
 )

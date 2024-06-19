@@ -357,8 +357,7 @@ output$country_rank_table <- renderDataTable({
     }
     color_map <- setNames(colors, events)  
 
-
-    p <- plot_ly(tmp, x = ~Height, y = ~Weight, customdata = ~Sport_url[Sport],type = 'scatter', mode = 'Paired',
+    p <- plot_ly(tmp, x = ~Height, y = ~Weight, customdata = ~ paste0('{"name":"', Sport, '","url":"', Sport_url[Sport], '"}'),type = 'scatter', mode = 'Paired',
                  marker = list(color = ~color_map[Event], opacity = 0.9), 
                 text = ~paste("Event:", Event, "<br>Height:", Height,"cm", "<br>Weight:", Weight,"kg"),
                  hoverinfo = 'text') 
